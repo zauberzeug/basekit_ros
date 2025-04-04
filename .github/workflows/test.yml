@@ -1,0 +1,44 @@
+
+name: Run Tests
+
+on: [push]
+
+jobs:
+  code-checks:
+    strategy:
+      matrix:
+        tools:
+          - command: "mypy ./basekit_ros --non-interactive" 
+          - command: "pylint ./basekit_ros"
+          - command: "ruff check ./basekit_ros"
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - name: set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: "pip"
+      - name: install dependencies
+        run: pip install -r requirements-dev.txt
+      - name: ${{ matrix.tools.command }}
+        run: ${{ matrix.tools.command }}
+  test:
+    strategy:
+      matrix:
+        python: ['3.11', '3.12']
+      fail-fast: false
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - name: setup up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+          cache: "pip"
+      - name: install dependencies
+        run: pip install -r requirements-dev.txt
+      - name: pytest
+        run: pytest

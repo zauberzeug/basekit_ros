@@ -1,0 +1,57 @@
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "basekit_ros"
+version = "0.1.0-dev"
+description = "todo"
+authors = [{ name="Zauberzeug GmbH", email="info@zauberzeug.com" }]
+readme = "README.md"
+requires-python = ">=3.11, <3.13"
+
+[tool.mypy]
+python_version = "3.11"
+install_types = true
+check_untyped_defs = true
+no_implicit_optional = true
+
+[tool.pylint]
+disable = [
+    "C0301", # Line too long
+    "C0114", # Missing module docstring
+    "C0116", # Missing function or method docstring
+]
+
+[tool.ruff]
+line-length = 120
+indent-width = 4
+target-version = "py311"
+
+[tool.ruff.lint]
+select = [
+    "E",  # pycodestyle
+    "F",  # pyflakes
+    "W",  # pycodestyle
+    "B",  # bugbear
+    "I",  # isort
+    "RUF", # ruff
+    "UP", # pyupgrade
+    "PL", # pylint
+]
+fixable = [
+    "I", # isort
+    "RUF022", # `__all__` is not sorted
+]
+ignore = [
+    "E501", # line too long
+]
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+# NOTE: changing default location of pytest_cache because the uvicorn file watcher somehow triggered too many reloads
+cache_dir = "../.pytest_cache"
+testpaths = [
+    "tests"
+]
