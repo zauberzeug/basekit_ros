@@ -38,4 +38,3 @@ You can also run the hooks manually by running:
 ```bash
 pre-commit run --all-files
 ```
-

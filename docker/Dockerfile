@@ -12,8 +12,9 @@ RUN apt-get update && apt-get install -y \
         nano \
         wget
 
-COPY ./basekit/requirements-dev.txt /tmp/requirements.txt
-RUN python3 -m pip install -r /tmp/requirements.txt && rm -f /tmp/requirements.txt
+COPY ./basekit/requirements-dev.txt /requirements-dev.txt
+COPY ./basekit/requirements.txt /requirements.txt
+RUN python3 -m pip install -r /requirements-dev.txt && rm -f /requirements-dev.txt && rm -f /requirements.txt
 # https://github.com/zauberzeug/nicegui/issues/2354
 RUN python3 -m pip install fastapi==0.108.0
 RUN python3 -m pip install setuptools==58.2.0
