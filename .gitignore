@@ -22,3 +22,7 @@ site/
 .nicegui/
 *.sqlite*
 test.py
+
+log/
+build/
+install/
