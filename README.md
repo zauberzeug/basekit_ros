@@ -2,9 +2,25 @@
 
 todo
 
+## Docker
+
+build:
+
+docker build -t basekit_ros -f docker/Dockerfile .
+
+run:
+docker run -it --network host --device=/dev/ttyTHS0:/dev/ttyTHS0 basekit_ros:latest
+
+### wip: Ff driver
+
+field friend driver is directly added because of the changes that were already made.
+
+source: https://github.com/ATB-potsdam-automation/field_friend_driver
+
 ## Development
 
 1. create a virtual environment and activate it:
+
 ```bash
 virtualenv .venv # or without virtualenv:
 python -m venv .venv
@@ -13,15 +29,16 @@ source .venv/bin/activate # to activate your virtual environment
 ```
 
 2. install dependencies:
+
 ```bash
 pip install -r requirements-dev.txt
 ```
 
 3. start your project:
+
 ```bash
 ./main.py
 ```
-
 
 ## pre-commit
 
