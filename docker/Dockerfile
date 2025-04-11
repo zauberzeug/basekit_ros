@@ -7,10 +7,24 @@ RUN apt-get update && apt-get install -y \
         ros-humble-xacro \
         ros-humble-rosbag2-storage-mcap \
         ros-humble-foxglove-msgs \
+        ros-humble-tf-transformations \
         python3-pip \
+        python3-serial \
         git \
         nano \
         wget
+
+# Setup lizard
+RUN mkdir -p /root/.lizard && \
+    cd /root && \
+    git clone https://github.com/zauberzeug/lizard.git && \
+    cp lizard/flash.py /root/.lizard/flash.py && \
+    cp lizard/esp.py /root/.lizard/esp.py && \
+    chmod +x /root/.lizard/flash.py && \
+    cd lizard && \
+    pip install -r requirements.txt && \
+    cd .. && \
+    echo "export PYTHONPATH=/root/.lizard:$PYTHONPATH" >> /root/.bashrc
 
 COPY ./basekit/requirements-dev.txt /requirements-dev.txt
 COPY ./basekit/requirements.txt /requirements.txt
@@ -21,5 +35,10 @@ RUN python3 -m pip install setuptools==58.2.0
 
 COPY ./docker/bashrc /tmp/bashrc
 RUN cat /tmp/bashrc >> /root/.bashrc && rm -f /tmp/bashrc
+
+# Copy and build field_friend_driver
+COPY ./field_friend_driver /workspace/src/field_friend_driver
+WORKDIR /workspace
+RUN . /opt/ros/humble/setup.sh && colcon build --packages-select field_friend_driver --symlink-install
 
 WORKDIR /workspace
