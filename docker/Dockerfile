@@ -1,4 +1,4 @@
-FROM osrf/ros:humble-desktop
+FROM ros:humble
 
 RUN apt-get update && apt-get install -y \
         ros-humble-domain-bridge \

@@ -6,6 +6,6 @@
   },
   "workspaceMount": "source=${localWorkspaceFolder},target=/workspace,type=bind",
   "workspaceFolder": "/workspace",
-  "runArgs": ["--network=host", "--platform", "linux/amd64"],
+  "runArgs": ["--network=host"],
   "containerEnv": {}
 }
