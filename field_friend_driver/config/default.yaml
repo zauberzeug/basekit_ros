@@ -1,0 +1,71 @@
+/**:
+  ros__parameters:
+    ## Sensor standard deviation [x,y,z] (optional)
+    ## This value is used to override the covariance matrix in nav_msgs/Odometry
+    ## Important: Make sure the values provided are in decimal points, or else might give error in execution
+    pose_stddev: [0.1, 0.1, 0.0, 0.0, 0.0, 0.1] # [m]
+    twist_stddev: [0.01, 0.0, 0.0, 0.0, 0.0, 0.01] # [m/s]
+    publish_tf: False
+
+    read_data:
+      list:
+        - time
+        - linear_speed
+        - angular_speed
+        - estop1_level
+        - estop2_level
+        - y_end_l
+        - y_end_r
+        - y_axis_idle
+        - y_axis_position
+        - y_alarm_level
+        - z_end_t
+        - z_end_b
+        - z_axis_idle
+        - z_axis_position
+        - z_alarm_level
+      time:
+        type: double
+        default: 0.0
+      linear_speed:
+        type: double
+        default: 0.0
+      angular_speed:
+        type: double
+        default: 0.0
+      estop1_level:
+        type: bool
+        default: False
+      estop2_level:
+        type: bool
+        default: False
+      y_end_l:
+        type: bool
+        default: False
+      y_end_r:
+        type: bool
+        default: False
+      y_axis_idle:
+        type: bool
+        default: False
+      y_axis_position:
+        type: double
+        default: 0.0
+      y_alarm_level:
+        type: bool
+        default: False
+      z_end_t:
+        type: double
+        default: 0.0
+      z_end_b:
+        type: double
+        default: 0.0
+      z_axis_idle:
+        type: bool
+        default: False
+      z_axis_position:
+        type: double
+        default: 0.0
+      z_alarm_level:
+        type: bool
+        default: False
