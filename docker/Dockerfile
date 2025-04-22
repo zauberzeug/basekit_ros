@@ -8,6 +8,7 @@ RUN apt-get update && apt-get install -y \
         ros-humble-rosbag2-storage-mcap \
         ros-humble-foxglove-msgs \
         ros-humble-tf-transformations \
+        ros-humble-septentrio-gnss-driver \
         python3-pip \
         python3-serial \
         git \
@@ -36,9 +37,12 @@ RUN python3 -m pip install setuptools==58.2.0
 COPY ./docker/bashrc /tmp/bashrc
 RUN cat /tmp/bashrc >> /root/.bashrc && rm -f /tmp/bashrc
 
-# Copy and build field_friend_driver
+# Copy ROS packages
 COPY ./field_friend_driver /workspace/src/field_friend_driver
+COPY ./basekit_launch /workspace/src/basekit_launch
+
+# Build ROS packages
 WORKDIR /workspace
-RUN . /opt/ros/humble/setup.sh && colcon build --packages-select field_friend_driver --symlink-install
+RUN . /opt/ros/humble/setup.sh && colcon build --packages-select field_friend_driver basekit_launch --symlink-install
 
 WORKDIR /workspace
