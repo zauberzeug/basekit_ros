@@ -1,11 +1,34 @@
 # basekit_ros
 
-todo
+notes:
+
+config file: what to do
+
+for eg yaxis canopen motors etc needs ctrl to be enabled before they can move. This is just a thing for weed screw and other zz accessories.
+
+```bash
+yaxis_motor.set_ctrl_enable(true)
+```
+
+this is missing in the code!
+
+u6 config runs with cmd_vel
+to run with 0.2ms
+
+```bash
+ros2 topic pub /cmd_vel geometry_msgs/msg/Twist "{linear: {x: 0.2, y: 0.0, z: 0.0}, angular: {x: 0.0, y: 0.0, z: 0.0}}" --once
+```
+
+to stop:
+
+```bash
+ros2 topic pub /cmd_vel geometry_msgs/msg/Twist "{linear: {x: 0.0, y: 0.0, z: 0.0}, angular: {x: 0.0, y: 0.0, z: 0.0}}" --once
+```
 
 ## Docker
 
 build:
-
+(from basekit directory)
 docker build -t basekit_ros -f docker/Dockerfile .
 
 run:
