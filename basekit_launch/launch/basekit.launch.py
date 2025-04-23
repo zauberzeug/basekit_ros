@@ -26,7 +26,15 @@ def generate_launch_description():
         )
     )
 
+    # Include the camera launch file
+    camera_launch = IncludeLaunchDescription(
+        PythonLaunchDescriptionSource(
+            os.path.join(pkg_dir, 'launch', 'camera.launch.py')
+        )
+    )
+
     return LaunchDescription([
         rover_launch,
-        field_friend_launch
+        field_friend_launch,
+        camera_launch
     ])
