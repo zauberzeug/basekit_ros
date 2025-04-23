@@ -9,6 +9,7 @@ RUN apt-get update && apt-get install -y \
         ros-humble-foxglove-msgs \
         ros-humble-tf-transformations \
         ros-humble-septentrio-gnss-driver \
+        ros-humble-usb-cam \
         python3-pip \
         python3-serial \
         git \
