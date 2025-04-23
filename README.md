@@ -25,14 +25,44 @@ to stop:
 ros2 topic pub /cmd_vel geometry_msgs/msg/Twist "{linear: {x: 0.0, y: 0.0, z: 0.0}, angular: {x: 0.0, y: 0.0, z: 0.0}}" --once
 ```
 
+## camera
+
+camera.launch uses cam usb
+
+to remotely view it with foxglove:
+
+```bash
+ssh -L 8765:localhost:8765 <device_name>
+```
+
 ## Docker
 
-build:
-(from basekit directory)
-docker build -t basekit_ros -f docker/Dockerfile .
+### Using Docker Compose (recommended)
 
-run:
-docker run -it --network host --device=/dev/ttyTHS0:/dev/ttyTHS0 basekit_ros:latest
+Build and run the container:
+
+```bash
+cd docker
+docker compose up --build
+```
+
+To run in detached mode:
+
+```bash
+docker compose up -d
+```
+
+To attach to a running container:
+
+```bash
+docker compose exec basekit bash
+```
+
+To stop:
+
+```bash
+docker compose down
+```
 
 ### wip: Ff driver
 
