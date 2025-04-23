@@ -68,8 +68,9 @@ def generate_launch_description():
     serial_port = find_septentrio_port()
 
     # Create a modified configuration that uses the detected serial port
+    # Note: Using 'serial://' prefix without a slash to avoid triple slash issue
     config = {
-        'device': f'serial://{serial_port}',
+        'device': 'serial://' + serial_port.lstrip('/'),  # Remove leading slash to avoid triple slash
         'serial.baudrate': 921600,
         'serial.hw_flow_control': 'off'
     }
