@@ -4,7 +4,6 @@
 """
 
 import rclpy
-from ament_index_python.packages import get_package_share_directory
 from rclpy.executors import SingleThreadedExecutor
 from rclpy.node import Node
 
@@ -17,8 +16,6 @@ from field_friend_driver.modules.twist_handler import TwistHandler
 from field_friend_driver.modules.yaxis_handler import YAxisHandler
 from field_friend_driver.modules.zaxis_handler import ZAxisHandler
 
-PACKAGE_NAME = 'field_friend_driver'
-
 
 class FieldFriendDriver(Node):
     """Field friend node handler."""
@@ -26,8 +23,9 @@ class FieldFriendDriver(Node):
     def __init__(self):
         super().__init__('field_friend_driver_node')
 
-        configuration_filename = get_package_share_directory(
-            PACKAGE_NAME) + '/config/startup.liz'
+        # Get startup file from parameters
+        self.declare_parameter('startup_file', '')
+        startup_file = self.get_parameter('startup_file').value
 
         self._serial_communication = SerialCommunication(self)
 
@@ -38,7 +36,7 @@ class FieldFriendDriver(Node):
         self._yaxis_handler = YAxisHandler(self, self._serial_communication)
         self._zaxis_handler = ZAxisHandler(self, self._serial_communication)
         self._configuration_handler = ConfigurationHandler(
-            self, self._serial_communication, configuration_filename)
+            self, self._serial_communication, startup_file)
 
         self.read_timer = self.create_timer(0.05, self.read_data)
 
