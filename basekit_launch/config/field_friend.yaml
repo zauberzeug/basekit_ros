@@ -7,6 +7,9 @@
     twist_stddev: [0.01, 0.0, 0.0, 0.0, 0.0, 0.01] # [m/s]
     publish_tf: False
 
+    ## This section maps Lizard's core output to ROS topics.
+    ## Each entry in the list corresponds to a value that can be read from the Lizard core module.
+    ## Types and default values are specified for each data point below.
     read_data:
       list:
         - time
