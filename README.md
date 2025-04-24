@@ -1,110 +1,140 @@
-# basekit_ros
+# BaseKit ROS
 
-notes:
+BaseKit ROS is a comprehensive ROS2 package that handles the communication and configuration of various field friend components:
 
-config file: what to do
+- Communication with Lizard (ESP32) to control the Field Friend
+- GNSS positioning system
+- Camera systems (USB and external cameras)
 
-for eg yaxis canopen motors etc needs ctrl to be enabled before they can move. This is just a thing for weed screw and other zz accessories.
+## Components
+
+### Field Friend Driver
+
+The Field Friend driver (based on [ATB Potsdam's field_friend_driver](https://github.com/ATB-potsdam-automation/field_friend_driver)) manages the communication with the ESP32 microcontroller running [Lizard](https://lizard.dev/) firmware - a domain-specific language for defining hardware behavior on embedded systems.
+
+The package provides:
+
+- `config/startup.liz`: Basic Lizard configuration for field friend robot
+- `config/field_friend.yaml`: Corresponding ROS2 driver configuration
+
+Basic movement control:
+With the field friend driver running, the robot can now listen to cmd_vel commands. For example:
 
 ```bash
-yaxis_motor.set_ctrl_enable(true)
-```
-
-this is missing in the code!
-
-u6 config runs with cmd_vel
-to run with 0.2ms
-
-```bash
+# Start robot movement
 ros2 topic pub /cmd_vel geometry_msgs/msg/Twist "{linear: {x: 0.2, y: 0.0, z: 0.0}, angular: {x: 0.0, y: 0.0, z: 0.0}}" --once
-```
 
-to stop:
-
-```bash
+# Stop robot
 ros2 topic pub /cmd_vel geometry_msgs/msg/Twist "{linear: {x: 0.0, y: 0.0, z: 0.0}, angular: {x: 0.0, y: 0.0, z: 0.0}}" --once
 ```
 
-## camera
+### Camera System
 
-camera.launch uses cam usb
+The camera system supports both USB cameras and external cameras. It provides:
 
-to remotely view it with foxglove:
+- Video streaming through ROS2 topics
+- Camera parameter configuration via `config/camera.yaml`
+- Integration with [Foxglove Studio](https://foxglove.dev/) for visualization using [ros-foxglove-bridge](https://github.com/foxglove/ros-foxglove-bridge)
 
-```bash
-ssh -L 8765:localhost:8765 <device_name>
-```
+Support for 360° cameras (AXIS) will be added soon.
 
-## Docker
+### GNSS (Rover)
 
-### Using Docker Compose (recommended)
+The GNSS system uses the [Septentrio GNSS driver](https://github.com/septentrio-gnss/septentrio_gnss_driver) with our `config/rover.yaml` configuration. Available topics:
 
-Build and run the container:
+- `/pvtgeodetic`: Position, velocity, and time in geodetic coordinates
+- `/poscovgeodetic`: Position covariance in geodetic coordinates
+- `/velcovgeodetic`: Velocity covariance in geodetic coordinates
+- `/atteuler`: Attitude in Euler angles
+- `/attcoveuler`: Attitude covariance
+- `/gpsfix`: Detailed GPS fix information including satellites and quality
+- `/aimplusstatus`: AIM+ status information
+
+## Docker Setup
+
+### Using Docker Compose (Recommended)
+
+1. Build and run the container:
 
 ```bash
 cd docker
 docker compose up --build
 ```
 
-To run in detached mode:
+2. Run in detached mode:
 
 ```bash
 docker compose up -d
 ```
 
-To attach to a running container:
+3. Attach to running container:
 
 ```bash
 docker compose exec basekit bash
 ```
 
-To stop:
+4. Stop containers:
 
 ```bash
 docker compose down
 ```
 
-### wip: Ff driver
+The Docker setup includes:
 
-field friend driver is directly added because of the changes that were already made.
-
-source: https://github.com/ATB-potsdam-automation/field_friend_driver
+- All necessary ROS2 packages
+- Lizard communication tools
+- Camera drivers
+- GNSS drivers
+- Development tools
 
 ## Development
 
-1. create a virtual environment and activate it:
+1. Create and activate virtual environment:
 
 ```bash
-virtualenv .venv # or without virtualenv:
 python -m venv .venv
-
-source .venv/bin/activate # to activate your virtual environment
+source .venv/bin/activate
 ```
 
-2. install dependencies:
+2. Install dependencies:
 
 ```bash
 pip install -r requirements-dev.txt
 ```
 
-3. start your project:
+3. Start the project:
 
 ```bash
 ./main.py
 ```
 
-## pre-commit
+### Code Quality
 
-[pre-commit](https://pre-commit.com/) is a tool to help you manage and run pre-commit hooks in your code.
-It is used to check your code for e.g. extra whitespace or formatting errors before committing it.
-Install the pre-commit hooks by running:
+This project uses pre-commit hooks for code quality:
+
+1. Install pre-commit hooks:
 
 ```bash
 pre-commit install
 ```
 
-You can also run the hooks manually by running:
+2. Run hooks manually:
 
 ```bash
 pre-commit run --all-files
+```
+
+## Launch Files
+
+The system can be started using different launch files:
+
+- `basekit.launch.py`: Launches all components
+- `field_friend.launch.py`: Launches only Field Friend driver
+- `camera.launch.py`: Launches camera system
+- `rover.launch.py`: Launches GNSS system
+
+To launch the complete system:
+
+```bash
+ros2 launch basekit_launch basekit.launch.py
 ```
