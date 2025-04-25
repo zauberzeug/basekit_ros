@@ -26,3 +26,5 @@ test.py
 log/
 build/
 install/
+
+basekit_launch/config/secrets.yaml
