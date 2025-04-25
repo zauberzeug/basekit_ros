@@ -2,6 +2,7 @@
 
 import os
 
+import yaml
 from ament_index_python.packages import get_package_share_directory
 from launch import LaunchDescription
 from launch.actions import DeclareLaunchArgument
@@ -14,6 +15,18 @@ def generate_launch_description():
 
     basekit_launch_dir = get_package_share_directory('basekit_launch')
     axis_config = os.path.join(basekit_launch_dir, 'config', 'axis_camera.yaml')
+    secrets_file = os.path.join(basekit_launch_dir, 'config', 'secrets.yaml')
+
+    # Load secrets
+    try:
+        with open(secrets_file, 'r') as f:
+            secrets = yaml.safe_load(f)
+            username = secrets['axis_cameras']['username']
+            password = secrets['axis_cameras']['password']
+    except (FileNotFoundError, KeyError):
+        print("Warning: secrets.yaml not found or invalid. Using template values.")
+        username = "root"
+        password = "your_password_here"
 
     # Define the AXIS camera addresses as launch arguments
     axis_cameras = {
@@ -41,8 +54,8 @@ def generate_launch_description():
                     {
                         'hostname': address,
                         'http_port': 80,
-                        'username': 'root',
-                        'password': 'zauberzg!',
+                        'username': username,
+                        'password': password,
                         'use_encrypted_password': False,
                         'frame_id': f'{namespace}/camera',
                         'camera_info_url': '',
