@@ -10,11 +10,18 @@ RUN apt-get update && apt-get install -y \
         ros-humble-tf-transformations \
         ros-humble-septentrio-gnss-driver \
         ros-humble-usb-cam \
+        ros-humble-image-transport \
+        ros-humble-image-transport-plugins \
+        ros-humble-image-tools \
+        ros-humble-compressed-image-transport \
+        ros-humble-axis-camera \
         python3-pip \
         python3-serial \
+        python3-requests \
         git \
         nano \
-        wget
+        wget \
+        iputils-ping
 
 # Setup lizard
 RUN mkdir -p /root/.lizard && \

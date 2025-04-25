@@ -33,13 +33,13 @@ class ConfigurationHandler:
             return
 
         try:
-            with open(self._filename) as f:
+        with open(self._filename) as f:
                 self._logger.info(f'Applying configuration from {self._filename}')
-                self._comm.send('!-')
-                for line in f.read().splitlines():
-                    self._comm.send(f'!+{line}')
-                self._comm.send('!.')
-                self._comm.send('core.restart()')
+            self._comm.send('!-')
+            for line in f.read().splitlines():
+                self._comm.send(f'!+{line}')
+            self._comm.send('!.')
+            self._comm.send('core.restart()')
                 self._logger.info('Configuration applied successfully')
         except Exception as e:
             self._logger.error(f'Failed to apply configuration: {str(e)}')

@@ -26,10 +26,10 @@ def generate_launch_description():
         )
     )
 
-    # Include the camera launch file
+    # Include the camera system launch file
     camera_launch = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(
-            os.path.join(pkg_dir, 'launch', 'camera.launch.py')
+            os.path.join(pkg_dir, 'launch', 'camera_system.launch.py')
         )
     )
 
