@@ -20,6 +20,6 @@ jobs:
           python-version: "3.11"
           cache: "pip"
       - name: install dependencies
-        run: pip install -r requirements-dev.txt
+        run: pip install -r ./basekit/requirements-dev.txt
       - name: ${{ matrix.tools.command }}
         run: ${{ matrix.tools.command }}
