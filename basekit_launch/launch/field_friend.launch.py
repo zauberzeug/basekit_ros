@@ -36,8 +36,7 @@ def generate_launch_description():
         Node(
             package='field_friend_driver',
             executable='field_friend_driver_node',
-            parameters=[{
-                'config_file': config_file,
+            parameters=[config_file, {
                 'startup_file': startup_file
             }],
             respawn=True,
