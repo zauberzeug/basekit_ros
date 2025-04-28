@@ -21,6 +21,6 @@ services:
       - ROS_DOMAIN_ID=0 # Default ROS domain
       - RMW_IMPLEMENTATION=rmw_cyclonedds_cpp # Using CycloneDDS
 
-    # Source and launch the main launch file
-    command: bash -c "source /opt/ros/humble/setup.bash && source /workspace/install/setup.bash && ros2 launch basekit_launch camera_system.launch.py"
+    # Source and launch the basekit system
+    command: bash -c "source /opt/ros/humble/setup.bash && source /workspace/install/setup.bash && ros2 launch basekit_launch basekit.launch.py"
     restart: unless-stopped

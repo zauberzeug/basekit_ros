@@ -11,6 +11,7 @@ from launch.launch_description_sources import PythonLaunchDescriptionSource
 def generate_launch_description():
     """Generate launch description for the complete basekit system."""
     pkg_dir = get_package_share_directory('basekit_launch')
+    ui_pkg_dir = get_package_share_directory('example_ui')
 
     # Include the rover launch file
     rover_launch = IncludeLaunchDescription(
@@ -33,8 +34,16 @@ def generate_launch_description():
         )
     )
 
+    # Include the UI launch file
+    ui_launch = IncludeLaunchDescription(
+        PythonLaunchDescriptionSource(
+            os.path.join(ui_pkg_dir, 'launch', 'ui.launch.py')
+        )
+    )
+
     return LaunchDescription([
         rover_launch,
         field_friend_launch,
-        camera_launch
+        camera_launch,
+        ui_launch
     ])
