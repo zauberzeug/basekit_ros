@@ -13,10 +13,10 @@ def generate_launch_description():
     pkg_dir = get_package_share_directory('basekit_launch')
     ui_pkg_dir = get_package_share_directory('example_ui')
 
-    # Include the rover launch file
-    rover_launch = IncludeLaunchDescription(
+    # Include the GNSS launch file
+    gnss_launch = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(
-            os.path.join(pkg_dir, 'launch', 'rover.launch.py')
+            os.path.join(pkg_dir, 'launch', 'gnss.launch.py')
         )
     )
 
@@ -42,7 +42,7 @@ def generate_launch_description():
     )
 
     return LaunchDescription([
-        rover_launch,
+        gnss_launch,
         field_friend_launch,
         camera_launch,
         ui_launch

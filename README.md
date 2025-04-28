@@ -49,9 +49,9 @@ The camera system supports both USB cameras and AXIS cameras:
 - Integration with [Foxglove Studio](https://foxglove.dev/) for remote camera viewing using [ros-foxglove-bridge](https://github.com/foxglove/ros-foxglove-bridge)
 - Support for compressed image transport
 
-### GNSS (Rover)
+### GNSS System
 
-The GNSS system uses the [Septentrio GNSS driver](https://github.com/septentrio-gnss/septentrio_gnss_driver) with our `config/rover.yaml` configuration. Available topics:
+The GNSS system uses the [Septentrio GNSS driver](https://github.com/septentrio-gnss/septentrio_gnss_driver) with our `config/gnss.yaml` configuration. Available topics:
 
 - `/pvtgeodetic`: Position, velocity, and time in geodetic coordinates
 - `/poscovgeodetic`: Position covariance in geodetic coordinates
@@ -144,7 +144,7 @@ The system can be started using different launch files:
 - `camera_system.launch.py`: Launches complete camera system (USB + AXIS)
 - `usb_camera.launch.py`: Launches USB camera only
 - `axis_cameras.launch.py`: Launches AXIS cameras only
-- `rover.launch.py`: Launches GNSS system
+- `gnss.launch.py`: Launches GNSS system
 
 To launch the complete system:
 

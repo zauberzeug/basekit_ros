@@ -47,7 +47,7 @@ def generate_launch_description():
     ]
 
     # Configuration file setup
-    default_file_name = 'rover.yaml'
+    default_file_name = 'gnss.yaml'
     name_arg_file_name = "file_name"
     arg_file_name = DeclareLaunchArgument(
         name_arg_file_name,
