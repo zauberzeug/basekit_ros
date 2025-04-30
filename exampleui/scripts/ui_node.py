@@ -67,7 +67,7 @@ class NiceGuiNode(Node):
                     self.params_status = ui.label('Waiting for parameters...').classes('text-red-500 text-sm mt-2')
             with ui.card().classes('w-[48rem] items-center mt-3'):
                 ui.label('GPS Map').classes('text-2xl')
-                self.map = ui.leaflet(center=(48.137154, 11.576124), zoom=13).classes('w-full h-96')
+                self.map = ui.leaflet(center=(48.137154, 11.576124), zoom=16).classes('w-full h-96')
                 self.marker = self.map.marker(latlng=self.map.center)
 
     def toggle_estop(self) -> None:
