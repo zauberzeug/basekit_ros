@@ -7,7 +7,7 @@
     framerate: 10.0
     io_method: "mmap"
     frame_id: "camera"
-    camera_name: "field_friend_camera"
+    camera_name: "basekit_camera"
     camera_info_url: ""
     brightness: 128
     contrast: 32

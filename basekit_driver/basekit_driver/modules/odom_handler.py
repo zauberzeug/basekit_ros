@@ -1,6 +1,3 @@
-""" Copyright (c) 2024 Leibniz-Institut für Agrartechnik und Bioökonomie e.V. (ATB)
-"""
-
 from typing import Dict
 
 import numpy as np
@@ -9,8 +6,8 @@ from nav_msgs.msg import Odometry
 from rclpy.node import Node
 from tf2_ros import TransformBroadcaster
 
-from field_friend_driver.communication.communication import Communication
-from field_friend_driver.data.data_odom import DataOdom
+from basekit_driver.communication.communication import Communication
+from basekit_driver.data.data_odom import DataOdom
 
 
 class OdomHandler:

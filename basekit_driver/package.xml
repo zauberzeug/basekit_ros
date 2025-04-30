@@ -1,12 +1,11 @@
 <?xml version="1.0"?>
 <?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
 <package format="3">
-  <name>field_friend_driver</name>
+  <name>basekit_driver</name>
   <version>0.0.5</version>
-  <description>TODO: Package description</description>
-  <maintainer email="tschuette@atb-potsdam.de">ros</maintainer>
-  <maintainer email="dkloeser@atb-potsdam.de">ros</maintainer>
-  <license>TODO: License declaration</license>
+  <description>Driver for running the basekit hardware</description>
+  <maintainer email="robotik@zauberzeug.com">ros</maintainer>
+  <license>MIT License</license>
 
   <test_depend>ament_copyright</test_depend>
   <test_depend>ament_flake8</test_depend>

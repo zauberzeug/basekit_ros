@@ -7,21 +7,21 @@ import rclpy
 from rclpy.executors import SingleThreadedExecutor
 from rclpy.node import Node
 
-from field_friend_driver.communication.serial_communication import SerialCommunication
-from field_friend_driver.modules.bms_handler import BMSHandler
-from field_friend_driver.modules.configuration_handler import ConfigurationHandler
-from field_friend_driver.modules.estop_handler import EStopHandler
-from field_friend_driver.modules.odom_handler import OdomHandler
-from field_friend_driver.modules.twist_handler import TwistHandler
-from field_friend_driver.modules.yaxis_handler import YAxisHandler
-from field_friend_driver.modules.zaxis_handler import ZAxisHandler
+from basekit_driver.communication.serial_communication import SerialCommunication
+from basekit_driver.modules.bms_handler import BMSHandler
+from basekit_driver.modules.configuration_handler import ConfigurationHandler
+from basekit_driver.modules.estop_handler import EStopHandler
+from basekit_driver.modules.odom_handler import OdomHandler
+from basekit_driver.modules.twist_handler import TwistHandler
+from basekit_driver.modules.yaxis_handler import YAxisHandler
+from basekit_driver.modules.zaxis_handler import ZAxisHandler
 
 
-class FieldFriendDriver(Node):
-    """Field friend node handler."""
+class BasekitDriver(Node):
+    """Basekit node handler."""
 
     def __init__(self):
-        super().__init__('field_friend_driver_node')
+        super().__init__('basekit_driver_node')
 
         # Get startup file from parameters
         self.declare_parameter('startup_file', '')
@@ -50,10 +50,10 @@ def main(args=None):
     rclpy.init(args=args)
 
     try:
-        field_friend_driver = FieldFriendDriver()
+        basekit_driver = BasekitDriver()
 
         executor = SingleThreadedExecutor()
-        executor.add_node(field_friend_driver)
+        executor.add_node(basekit_driver)
 
         try:
             executor.spin()

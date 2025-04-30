@@ -1,4 +1,4 @@
-"""Launch file for the Field Friend driver node."""
+"""Launch file for the basekit driver node."""
 
 import os
 
@@ -10,7 +10,7 @@ from launch_ros.actions import Node
 
 
 def generate_launch_description():
-    """Generate launch description for Field Friend driver."""
+    """Generate launch description for Basekit driver."""
     config_file = LaunchConfiguration('config_file')
     startup_file = LaunchConfiguration('startup_file')
 
@@ -21,7 +21,7 @@ def generate_launch_description():
 
     config_file_launch_arg = DeclareLaunchArgument(
         'config_file',
-        default_value=os.path.join(config_directory, 'field_friend.yaml')
+        default_value=os.path.join(config_directory, 'basekit.yaml')
     )
 
     startup_file_launch_arg = DeclareLaunchArgument(
@@ -34,8 +34,8 @@ def generate_launch_description():
         config_file_launch_arg,
         startup_file_launch_arg,
         Node(
-            package='field_friend_driver',
-            executable='field_friend_driver_node',
+            package='basekit_driver',
+            executable='basekit_driver_node',
             parameters=[config_file, {
                 'startup_file': startup_file
             }],

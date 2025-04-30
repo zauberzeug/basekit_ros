@@ -9,7 +9,7 @@ services:
     network_mode: host # Required for ROS2 communication
     privileged: true # Required for hardware access
     devices:
-      - /dev/ttyTHS0:/dev/ttyTHS0 # Field Friend serial port
+      - /dev/ttyTHS0:/dev/ttyTHS0 # Basekit serial port
       - /dev/ttyACM0:/dev/ttyACM0 # GNSS receiver (USB ACM)
       - /dev/video0:/dev/video0 # Camera main video stream
       - /dev/video1:/dev/video1 # Camera metadata stream

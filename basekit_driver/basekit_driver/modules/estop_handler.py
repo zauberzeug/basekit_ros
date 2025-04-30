@@ -1,10 +1,7 @@
-""" Copyright (c) 2024 Leibniz-Institut für Agrartechnik und Bioökonomie e.V. (ATB)
-"""
-
 from rclpy.node import Node
 from std_msgs.msg import Bool
 
-from field_friend_driver.communication.communication import Communication
+from basekit_driver.communication.communication import Communication
 
 
 class EStopHandler:

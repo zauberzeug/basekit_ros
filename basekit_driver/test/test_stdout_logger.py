@@ -1,7 +1,7 @@
 import logging
 import unittest
 
-from field_friend_driver.logger.stdout_logger import StdOutLogger
+from basekit_driver.logger.stdout_logger import StdOutLogger
 
 
 class TestStdOutLogger(unittest.TestCase):

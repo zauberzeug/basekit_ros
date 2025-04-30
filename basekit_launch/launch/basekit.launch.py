@@ -20,10 +20,10 @@ def generate_launch_description():
         )
     )
 
-    # Include the field friend launch file
-    field_friend_launch = IncludeLaunchDescription(
+    # Include the basekit driver launch file
+    basekit_driver_launch = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(
-            os.path.join(pkg_dir, 'launch', 'field_friend.launch.py')
+            os.path.join(pkg_dir, 'launch', 'basekit_driver.launch.py')
         )
     )
 
@@ -43,7 +43,7 @@ def generate_launch_description():
 
     return LaunchDescription([
         gnss_launch,
-        field_friend_launch,
+        basekit_driver_launch,
         camera_launch,
         ui_launch
     ])

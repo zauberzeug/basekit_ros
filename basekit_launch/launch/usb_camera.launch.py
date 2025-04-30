@@ -25,8 +25,8 @@ def generate_launch_description():
             name='usb_cam',
             parameters=[config_file],
             remappings=[
-                ('image_raw', '/field_friend/camera/image_raw'),
-                ('camera_info', '/field_friend/camera/camera_info'),
+                ('image_raw', '/basekit/camera/image_raw'),
+                ('camera_info', '/basekit/camera/camera_info'),
             ]
         ),
     ])
