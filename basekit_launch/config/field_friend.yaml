@@ -7,7 +7,7 @@
     twist_stddev: [0.01, 0.0, 0.0, 0.0, 0.0, 0.01] # [m/s]
     publish_tf: False
 
-    ## This section maps Lizard's core output to ROS topics.
+    ## This section maps Lizard's core output to ROS parameters.
     ## Each entry in the list corresponds to a value that can be read from the Lizard core module.
     ## Types and default values are specified for each data point below.
     read_data:
@@ -26,12 +26,12 @@
         - zaxis_motor_actual_position
         - zaxis_status_target_reached
         - zaxis_motor_status_fault
-        - estop1_level
-        - estop2_level
+        - estop1_level # this name is to be used in the UI
+        - estop2_level # this name is to be used in the UI
         - battery_status_level
-        - bumper_front_top_level
-        - bumper_front_bottom_level
-        - bumper_back_level
+        - bumper_front_top_level # this name is to be used in the UI
+        - bumper_front_bottom_level # this name is to be used in the UI
+        - bumper_back_level # this name is to be used in the UI
         - imu_cal_gyr
         - imu_quat_w
         - imu_quat_x
