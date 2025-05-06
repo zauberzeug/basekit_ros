@@ -15,6 +15,17 @@
         - time
         - linear_speed
         - angular_speed
+        - yaxis_end_l_active
+        - yaxis_end_r_active
+        - yaxis_motor_actual_position
+        - yaxis_status_target_reached
+        - yaxis_motor_status_fault
+        - yaxis_ctrl_enable
+        - zaxis_end_t_active
+        - zaxis_end_b_active
+        - zaxis_motor_actual_position
+        - zaxis_status_target_reached
+        - zaxis_motor_status_fault
         - estop1_level # this name is to be used in the UI
         - estop2_level # this name is to be used in the UI
         - battery_status_level
@@ -39,6 +50,39 @@
       angular_speed:
         type: double
         default: 0.0
+      yaxis_end_l_active:
+        type: bool
+        default: False
+      yaxis_end_r_active:
+        type: bool
+        default: False
+      yaxis_motor_actual_position:
+        type: double
+        default: 0.0
+      yaxis_status_target_reached:
+        type: bool
+        default: False
+      yaxis_motor_status_fault:
+        type: bool
+        default: False
+      yaxis_ctrl_enable:
+        type: bool
+        default: False
+      zaxis_end_t_active:
+        type: bool
+        default: False
+      zaxis_end_b_active:
+        type: bool
+        default: False
+      zaxis_motor_actual_position:
+        type: double
+        default: 0.0
+      zaxis_status_target_reached:
+        type: bool
+        default: False
+      zaxis_motor_status_fault:
+        type: bool
+        default: False
       estop1_level:
         type: bool
         default: False
