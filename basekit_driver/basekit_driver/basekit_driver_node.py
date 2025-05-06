@@ -9,6 +9,7 @@ from rclpy.node import Node
 
 from basekit_driver.communication.serial_communication import SerialCommunication
 from basekit_driver.modules.bms_handler import BMSHandler
+from basekit_driver.modules.bumper_handler import BumperHandler
 from basekit_driver.modules.configuration_handler import ConfigurationHandler
 from basekit_driver.modules.estop_handler import EStopHandler
 from basekit_driver.modules.odom_handler import OdomHandler
@@ -31,6 +32,7 @@ class BasekitDriver(Node):
 
         self._odom_handler = OdomHandler(self, self._serial_communication)
         self._bms_handler = BMSHandler(self, self._serial_communication)
+        self._bumper_handler = BumperHandler(self, self._serial_communication)
         self._twist_handler = TwistHandler(self, self._serial_communication)
         self._estop_handler = EStopHandler(self, self._serial_communication)
         self._yaxis_handler = YAxisHandler(self, self._serial_communication)

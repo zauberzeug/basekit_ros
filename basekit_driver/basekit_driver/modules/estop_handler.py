@@ -15,10 +15,21 @@ class EStopHandler:
         self.subscription = node.create_subscription(
             Bool, 'emergency_stop', self.callback, 10
         )
+        # Add publishers for hardware estops
+        self.estop1_publisher = node.create_publisher(Bool, 'estop1_state', 10)
+        self.estop2_publisher = node.create_publisher(Bool, 'estop2_state', 10)
+        comm.register_core_observer(self)
 
-    def update(self, estop: bool):
-        """Update estop position."""
-        self._software_estop = estop
+    def update(self, data: dict):
+        """Update estop position from core data."""
+        if 'estop1_level' in data:
+            msg = Bool()
+            msg.data = bool(data['estop1_level'])
+            self.estop1_publisher.publish(msg)
+        if 'estop2_level' in data:
+            msg = Bool()
+            msg.data = bool(data['estop2_level'])
+            self.estop2_publisher.publish(msg)
 
     def send(self):
         """Send estop command."""
@@ -26,5 +37,5 @@ class EStopHandler:
 
     def callback(self, msg: Bool):
         """Implement a callback for the estop."""
-        self.update(msg.data)
+        self._software_estop = msg.data
         self._comm.send(self.send())
