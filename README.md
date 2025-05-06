@@ -69,25 +69,25 @@ The GNSS system uses the [Septentrio GNSS driver](https://github.com/septentrio-
 
 ```bash
 cd docker
-docker compose up --build
+docker-compose up --build
 ```
 
 2. Run in detached mode:
 
 ```bash
-docker compose up -d
+docker-compose up -d
 ```
 
 3. Attach to running container:
 
 ```bash
-docker compose exec basekit bash
+docker-compose exec basekit bash
 ```
 
 4. Stop containers:
 
 ```bash
-docker compose down
+docker-compose down
 ```
 
 The Docker setup includes:
@@ -98,41 +98,40 @@ The Docker setup includes:
 - GNSS drivers
 - Development tools
 
-## Development
+## Connect to UI
 
-1. Create and activate virtual environment:
+To access the user interface (UI), follow these steps:
+
+1. **Connect to the Robot's Wi-Fi:**  
+   Join the robot's WLAN network.
+
+2. **Open the UI in your browser:**  
+   Navigate to:
+
+   ```
+   http://<ROBOT-IP>:9001
+   ```
+
+   (Replace `<ROBOT-IP>` with the actual IP address once you have it.)
+
+3. **Remote Access:**  
+   If you want to connect remotely, set up port forwarding to port 9001.
+
+**Example: SSH Port Forwarding**
+
+To access the UI remotely via SSH port forwarding, use the following command on your local machine:
 
 ```bash
-python -m venv .venv
-source .venv/bin/activate
+ssh -L 9001:localhost:9001 <user>@<robot-ip>
 ```
 
-2. Install dependencies:
+- Replace `<user>` with your username on the robot.
+- Replace `<robot-ip>` with the robot's IP address.
 
-```bash
-pip install -r requirements-dev.txt
+After running this command, open your browser and go to:
+
 ```
-
-3. Start the project:
-
-```bash
-./main.py
-```
-
-### Code Quality
-
-This project uses pre-commit hooks for code quality:
-
-1. Install pre-commit hooks:
-
-```bash
-pre-commit install
-```
-
-2. Run hooks manually:
-
-```bash
-pre-commit run --all-files
+http://localhost:9001
 ```
 
 ## Launch Files
@@ -145,6 +144,7 @@ The system can be started using different launch files:
 - `usb_camera.launch.py`: Launches USB camera only
 - `axis_cameras.launch.py`: Launches AXIS cameras only
 - `gnss.launch.py`: Launches GNSS system
+- `ui.launch.py`: Launches the example UI node
 
 To launch the complete system:
 
