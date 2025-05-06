@@ -29,10 +29,16 @@ class NiceGuiNode(Node):
 
         self.subscription = self.create_subscription(GPSFix, 'gpsfix', self.store_gps, 1)
         self.battery_subscription = self.create_subscription(BatteryState, 'battery_state', self.store_battery, 1)
+        self.bumper_front_top_subscription = self.create_subscription(
+            Bool, 'bumper_front_top_state', self.update_bumper_front_top, 1)
+        self.bumper_front_bottom_subscription = self.create_subscription(
+            Bool, 'bumper_front_bottom_state', self.update_bumper_front_bottom, 1)
+        self.bumper_back_subscription = self.create_subscription(Bool, 'bumper_back_state', self.update_bumper_back, 1)
+        self.estop1_subscription = self.create_subscription(Bool, 'estop1_state', self.update_estop1, 1)
+        self.estop2_subscription = self.create_subscription(Bool, 'estop2_state', self.update_estop2, 1)
         self.latest_gps = None
         self.latest_battery = None
         self.timer = self.create_timer(2.0, self.update_gps_ui)
-        self.params_available = False
         self.estop_active = False
 
         with Client.auto_index_client:
@@ -64,7 +70,6 @@ class NiceGuiNode(Node):
                     ui.label('E-Stops').classes('text-xs mb-[-1.4em] mt-4')
                     self.estop1 = ui.label('E-Stop 1: ---').classes('text-sm')
                     self.estop2 = ui.label('E-Stop 2: ---').classes('text-sm')
-                    self.params_status = ui.label('Waiting for parameters...').classes('text-red-500 text-sm mt-2')
             with ui.card().classes('w-[48rem] items-center mt-3'):
                 ui.label('GPS Map').classes('text-2xl')
                 self.map = ui.leaflet(center=(48.137154, 11.576124), zoom=16).classes('w-full h-96')
@@ -105,40 +110,26 @@ class NiceGuiNode(Node):
         if self.latest_battery is not None:
             self.battery.text = f'{self.latest_battery.percentage * 100:.1f}% ({self.latest_battery.voltage:.1f}V)'
 
+    def update_bumper_front_top(self, msg: Bool) -> None:
+        self.bumper_front_top.text = f'Front Top: {"ACTIVE" if msg.data else "inactive"}'
+
+    def update_bumper_front_bottom(self, msg: Bool) -> None:
+        self.bumper_front_bottom.text = f'Front Bottom: {"ACTIVE" if msg.data else "inactive"}'
+
+    def update_bumper_back(self, msg: Bool) -> None:
+        self.bumper_back.text = f'Back: {"ACTIVE" if msg.data else "inactive"}'
+
+    def update_estop1(self, msg: Bool) -> None:
+        self.estop1.text = f'E-Stop 1: {"ACTIVE" if msg.data else "inactive"}'
+
+    def update_estop2(self, msg: Bool) -> None:
+        self.estop2.text = f'E-Stop 2: {"ACTIVE" if msg.data else "inactive"}'
+
     def update_gps_ui(self) -> None:
         """Update the UI with the latest GPS data every 2 seconds."""
         if self.latest_gps is not None:
             self.map.set_center((self.latest_gps.latitude, self.latest_gps.longitude))
             self.marker.move(self.latest_gps.latitude, self.latest_gps.longitude)
-
-        # Update bumper states
-        try:
-            front_top = self.get_parameter('read_data.bumper_front_top_level').value
-            front_bottom = self.get_parameter('read_data.bumper_front_bottom_level').value
-            back = self.get_parameter('read_data.bumper_back_level').value
-            estop1 = self.get_parameter('read_data.estop1_level').value
-            estop2 = self.get_parameter('read_data.estop2_level').value
-
-            self.bumper_front_top.text = f'Front Top: {"ACTIVE" if front_top else "inactive"}'
-            self.bumper_front_bottom.text = f'Front Bottom: {"ACTIVE" if front_bottom else "inactive"}'
-            self.bumper_back.text = f'Back: {"ACTIVE" if back else "inactive"}'
-            self.estop1.text = f'E-Stop 1: {"ACTIVE" if estop1 else "inactive"}'
-            self.estop2.text = f'E-Stop 2: {"ACTIVE" if estop2 else "inactive"}'
-
-            if not self.params_available:
-                self.params_available = True
-                self.params_status.text = 'Parameters available'
-                self.params_status.classes('text-green-500')
-        except rclpy.exceptions.ParameterNotDeclaredException:
-            if self.params_available:
-                self.params_available = False
-                self.params_status.text = 'Waiting for parameters...'
-                self.params_status.classes('text-red-500')
-            self.bumper_front_top.text = 'Front Top: ---'
-            self.bumper_front_bottom.text = 'Front Bottom: ---'
-            self.bumper_back.text = 'Back: ---'
-            self.estop1.text = 'E-Stop 1: ---'
-            self.estop2.text = 'E-Stop 2: ---'
 
 
 def main() -> None:
