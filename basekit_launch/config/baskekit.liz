@@ -1,0 +1,56 @@
+rdyp = Output(15)
+en3 = Output(12)
+bluetooth = Bluetooth("Basekit")
+can = Can(32, 33, 1000000)
+l0 = ODriveMotor(can, 0, 6)
+r0 = ODriveMotor(can, 512, 6)
+l1 = ODriveMotor(can, 256, 6)
+r1 = ODriveMotor(can, 768, 6)
+
+# wheel_diameter * pi / motor_gear_ratio
+l0.m_per_tick = 0.03953674121405751
+r0.m_per_tick = 0.03953674121405751
+l1.m_per_tick = 0.03953674121405751
+r1.m_per_tick = 0.03953674121405751
+l0.reversed = true
+r0.reversed = false
+l1.reversed = true
+r1.reversed = false
+wheels = ODriveWheels(l0, r0)
+wheels_front = ODriveWheels(l1, r1)
+wheels.width = 0.47
+wheels_front.width = 0.47
+wheels.shadow(wheels_front)
+
+serial = Serial(26, 27, 115200, 1)
+p0 = Expander(serial, 25, 14)
+bms = p0.Serial(26, 27, 9600, 2)
+bms.unmute()
+
+estop_1 = Input(34)
+estop_2 = Input(35)
+estop_1.inverted = true
+estop_2.inverted = true
+battery_control_reset = p0.Output(15)
+battery_control_status = p0.Input(13)
+
+bumper_front_top = p0.Input(21)
+bumper_front_bottom = p0.Input(35)
+bumper_back = p0.Input(18)
+
+imu = Imu()
+rdyp_status = Input(39)
+vdp_status = p0.Input(39)
+
+let stop do wheels.speed(0, 0);end
+when estop_1.level == 0 then stop(); end
+when estop_2.level == 0 then stop(); end
+when bumper_front_top.level == 1 then stop(); end
+when bumper_front_bottom.level == 1 then stop(); end
+when bumper_back.level == 1 then stop(); end
+when core.last_message_age > 1000 then wheels.speed(0, 0); end
+when core.last_message_age > 20000 then stop(); end
+
+core.output("core.millis wheels.linear_speed:3 wheels.angular_speed:3 l0.motor_error_flag r0.motor_error_flag l1.motor_error_flag r1.motor_error_flag estop_1.active estop_2.active battery_control_status.level bumper_front_top.active bumper_front_bottom.active bumper_back.active imu.cal_gyr imu.quat_w:4 imu.quat_x:4 imu.quat_y:4 imu.quat_z:4 rdyp_status.level vdp_status.level core.heap")
+rdyp.on()
+en3.on()

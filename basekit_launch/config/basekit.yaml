@@ -15,12 +15,16 @@
         - time
         - linear_speed
         - angular_speed
-        - estop1_level # this name is to be used in the UI
-        - estop2_level # this name is to be used in the UI
+        - l0_error_flag
+        - r0_error_flag
+        - l1_error_flag
+        - r1_error_flag
+        - estop1_active # this name is to be used in the UI
+        - estop2_active # this name is to be used in the UI
         - battery_status_level
-        - bumper_front_top_level # this name is to be used in the UI
-        - bumper_front_bottom_level # this name is to be used in the UI
-        - bumper_back_level # this name is to be used in the UI
+        - bumper_front_top_active # this name is to be used in the UI
+        - bumper_front_bottom_active # this name is to be used in the UI
+        - bumper_back_active # this name is to be used in the UI
         - imu_cal_gyr
         - imu_quat_w
         - imu_quat_x
@@ -39,22 +43,34 @@
       angular_speed:
         type: double
         default: 0.0
-      estop1_level:
+      l0_error_flag:
         type: bool
         default: False
-      estop2_level:
+      r0_error_flag:
+        type: bool
+        default: False
+      l1_error_flag:
+        type: bool
+        default: False
+      r1_error_flag:
+        type: bool
+        default: False
+      estop1_active:
+        type: bool
+        default: False
+      estop2_active:
         type: bool
         default: False
       battery_status_level:
         type: bool
         default: False
-      bumper_front_top_level:
+      bumper_front_top_active:
         type: bool
         default: False
-      bumper_front_bottom_level:
+      bumper_front_bottom_active:
         type: bool
         default: False
-      bumper_back_level:
+      bumper_back_active:
         type: bool
         default: False
       imu_cal_gyr:
