@@ -5,53 +5,47 @@ BaseKit ROS is a comprehensive ROS2 package that handles the communication and c
 - Communication with Lizard (ESP32) to control the Field Friend
 - GNSS positioning system
 - Camera systems (USB and AXIS cameras)
+- Example UI to control the robot
+
+All launch files and configuration files (except for the UI) are stored in the `basekit_launch` package.
 
 ## Components
 
-### Field Friend Driver
+### Basekit driver
 
-The Field Friend driver (based on [ATB Potsdam's field_friend_driver](https://github.com/ATB-potsdam-automation/field_friend_driver)) manages the communication with the ESP32 microcontroller running [Lizard](https://lizard.dev/) firmware - a domain-specific language for defining hardware behavior on embedded systems.
+The BaseKit driver (based on [ATB Potsdam's field_friend_driver](https://github.com/ATB-potsdam-automation/field_friend_driver)) manages the communication with the ESP32 microcontroller running [Lizard](https://lizard.dev/) firmware - a domain-specific language for defining hardware behavior on embedded systems.
 
 The package provides:
 
-- `config/startup.liz`: Basic Lizard configuration for field friend robot
-- `config/field_friend.yaml`: Corresponding ROS2 driver configuration
+- `config/basekit.liz`: Basic Lizard configuration for BaseKit robot
+- `config/basekit.yaml`: Corresponding ROS2 driver configuration
 
-Basic movement control:
-With the field friend driver running, the robot can now listen to cmd_vel commands. For example:
+Available ROS2 topics:
 
-```bash
-# Start robot movement
-ros2 topic pub /cmd_vel geometry_msgs/msg/Twist "{linear: {x: 0.2, y: 0.0, z: 0.0}, angular: {x: 0.0, y: 0.0, z: 0.0}}" --once
-
-# Stop robot
-ros2 topic pub /cmd_vel geometry_msgs/msg/Twist "{linear: {x: 0.0, y: 0.0, z: 0.0}, angular: {x: 0.0, y: 0.0, z: 0.0}}" --once
-```
+- `/cmd_vel` (geometry_msgs/Twist): Control robot movement
+- `/odom` (nav_msgs/Odometry): Robot odometry data
+- `/battery_state` (sensor_msgs/BatteryState): Battery status information
+- `/bumper_front_top_state` (std_msgs/Bool): Front top bumper state
+- `/bumper_front_bottom_state` (std_msgs/Bool): Front bottom bumper state
+- `/bumper_back_state` (std_msgs/Bool): Back bumper state
+- `/emergency_stop` (std_msgs/Bool): Software emergency stop control
+- `/estop1_state` (std_msgs/Bool): Hardware emergency stop 1 state
+- `/estop2_state` (std_msgs/Bool): Hardware emergency stop 2 state
+- `/configure` (std_msgs/Empty): Trigger loading of the Lizard configuration file
 
 ### Camera System
 
-The camera system supports both USB cameras and AXIS cameras:
+The camera system supports both USB cameras and AXIS cameras, managed through a unified launch system in `camera_system.launch.py` that handles USB cameras, AXIS cameras, and the Foxglove Bridge for remote viewing.
 
-#### USB Camera
+The USB camera system provides video streaming through ROS2 topics using the `usb_cam` ROS2 package. Camera parameters can be configured through `config/camera.yaml`.
 
-- Video streaming through ROS2 topics
-- Camera configuration via `config/camera.yaml`
-- Support for standard USB cameras using the `usb_cam` ROS2 package
+The AXIS camera system integrates with the [ROS2 AXIS camera driver](https://github.com/ros-drivers/axis_camera/tree/humble-devel) to support multiple IP cameras with individual streams. Each camera can be configured through `config/axis_camera.yaml`, with credentials managed through `config/secrets.yaml` (template provided in `config/secrets.yaml.template`).
 
-#### AXIS Cameras
-
-- Support for AXIS IP cameras using the [ROS2 AXIS camera driver](https://github.com/ros-drivers/axis_camera/tree/humble-devel)
-- Multi-camera support with individual streams
-- Camera configuration via `config/axis_camera.yaml`
-
-#### Visualization
-
-- Integration with [Foxglove Studio](https://foxglove.dev/) for remote camera viewing using [ros-foxglove-bridge](https://github.com/foxglove/ros-foxglove-bridge)
-- Support for compressed image transport
+The visualization system integrates with [Foxglove Studio](https://foxglove.dev/) for remote camera viewing, supporting compressed image transport. The Foxglove Bridge is accessible via WebSocket connection on port 8765.
 
 ### GNSS System
 
-The GNSS system uses the [Septentrio GNSS driver](https://github.com/septentrio-gnss/septentrio_gnss_driver) with our `config/gnss.yaml` configuration. Available topics:
+The GNSS system uses the [Septentrio GNSS driver](https://github.com/septentrio-gnss/septentrio_gnss_driver) with the default `config/gnss.yaml` configuration. Available topics:
 
 - `/pvtgeodetic`: Position, velocity, and time in geodetic coordinates
 - `/poscovgeodetic`: Position covariance in geodetic coordinates
@@ -61,9 +55,20 @@ The GNSS system uses the [Septentrio GNSS driver](https://github.com/septentrio-
 - `/gpsfix`: Detailed GPS fix information including satellites and quality
 - `/aimplusstatus`: AIM+ status information
 
+### Example UI
+
+The example UI provides a robot control interface built with NiceGUI, featuring a joystick control similar to turtlesim. It gives you access to and visualization of all topics made available by the BaseKit driver, including:
+
+- Robot movement control through a joystick interface
+- Real-time visualization of GNSS data
+- Monitoring of safety systems (bumpers, emergency stops)
+- Software emergency stop control
+
+The interface is accessible through a web browser at `http://<ROBOT-IP>:9001` when the robot is running.
+
 ## Docker Setup
 
-### Using Docker Compose (Recommended)
+### Using Docker Compose
 
 1. Build and run the container:
 
@@ -96,7 +101,6 @@ The Docker setup includes:
 - Lizard communication tools
 - Camera drivers
 - GNSS drivers
-- Development tools
 
 ## Connect to UI
 
@@ -113,26 +117,6 @@ To access the user interface (UI), follow these steps:
    ```
 
    (Replace `<ROBOT-IP>` with the actual IP address once you have it.)
-
-3. **Remote Access:**  
-   If you want to connect remotely, set up port forwarding to port 9001.
-
-**Example: SSH Port Forwarding**
-
-To access the UI remotely via SSH port forwarding, use the following command on your local machine:
-
-```bash
-ssh -L 9001:localhost:9001 <user>@<robot-ip>
-```
-
-- Replace `<user>` with your username on the robot.
-- Replace `<robot-ip>` with the robot's IP address.
-
-After running this command, open your browser and go to:
-
-```
-http://localhost:9001
-```
 
 ## Launch Files
 
