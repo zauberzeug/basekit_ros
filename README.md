@@ -66,6 +66,8 @@ The example UI provides a robot control interface built with NiceGUI, featuring 
 
 The interface is accessible through a web browser at `http://<ROBOT-IP>:9001` when the robot is running.
 
+![Example UI Screenshot](assets/ExampleUI.png)
+
 ## Docker Setup
 
 ### Using Docker Compose
