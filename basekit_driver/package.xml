@@ -2,9 +2,9 @@
 <?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
 <package format="3">
   <name>basekit_driver</name>
-  <version>0.0.5</version>
-  <description>Driver for running the basekit hardware</description>
-  <maintainer email="robotik@zauberzeug.com">ros</maintainer>
+  <version>0.0.1</version>
+  <description>Driver for running the a basekit robot</description>
+  <maintainer email="ros@zauberzeug.com">ros</maintainer>
   <license>MIT License</license>
 
   <test_depend>ament_copyright</test_depend>
@@ -15,6 +15,7 @@
   <exec_depend>rclpy</exec_depend>
   <exec_depend>std_msgs</exec_depend>
   <exec_depend>geometry_msgs</exec_depend>
+  <exec_depend>sensor_msgs</exec_depend>
   <exec_depend>pyserial</exec_depend>
   <exec_depend>ros2launch</exec_depend>
   <exec_depend>tf_transformations</exec_depend>
