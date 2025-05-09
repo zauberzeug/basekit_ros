@@ -1,3 +1,8 @@
+""" Copyright (c) 2024 Leibniz-Institut für Agrartechnik und Bioökonomie e.V. (ATB)
+    Modified by Zauberzeug GmbH
+"""
+
+
 from rclpy.node import Node
 from std_msgs.msg import Bool
 
@@ -22,13 +27,13 @@ class EStopHandler:
 
     def update(self, data: dict):
         """Update estop position from core data."""
-        if 'estop1_level' in data:
+        if 'estop1_active' in data:
             msg = Bool()
-            msg.data = bool(data['estop1_level'])
+            msg.data = bool(data['estop1_active'])
             self.estop1_publisher.publish(msg)
-        if 'estop2_level' in data:
+        if 'estop2_active' in data:
             msg = Bool()
-            msg.data = bool(data['estop2_level'])
+            msg.data = bool(data['estop2_active'])
             self.estop2_publisher.publish(msg)
 
     def send(self):

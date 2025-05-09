@@ -1,4 +1,5 @@
 """ Copyright (c) 2024 Leibniz-Institut für Agrartechnik und Bioökonomie e.V. (ATB)
+    Modified by Zauberzeug GmbH
 """
 
 from rclpy.impl.rcutils_logger import RcutilsLogger
@@ -27,4 +28,4 @@ class ROSLogger(Logger):
 
     def error(self, line: str) -> None:
         """Print error message."""
-        self._logger(line)
+        self._logger.error(line)

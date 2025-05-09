@@ -26,8 +26,8 @@ def generate_launch_description():
 
     startup_file_launch_arg = DeclareLaunchArgument(
         'startup_file',
-        default_value=os.path.join(config_directory, 'startup.liz'),
-        description='Path to the Lizard startup file (startup.liz)'
+        default_value=os.path.join(config_directory, 'basekit.liz'),
+        description='Path to the Lizard startup file (basekit.liz)'
     )
 
     return LaunchDescription([

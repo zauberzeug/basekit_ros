@@ -1,3 +1,6 @@
+""" Copyright (c) 2025 Zauberzeug GmbH
+"""
+
 from rclpy.node import Node
 from std_msgs.msg import Bool
 
@@ -18,15 +21,15 @@ class BumperHandler:
 
     def update(self, data: dict):
         """Update bumper states from core data and publish."""
-        if 'bumper_front_top_level' in data:
+        if 'bumper_front_top_active' in data:
             msg = Bool()
-            msg.data = bool(data['bumper_front_top_level'])
+            msg.data = bool(data['bumper_front_top_active'])
             self._pub_front_top.publish(msg)
-        if 'bumper_front_bottom_level' in data:
+        if 'bumper_front_bottom_active' in data:
             msg = Bool()
-            msg.data = bool(data['bumper_front_bottom_level'])
+            msg.data = bool(data['bumper_front_bottom_active'])
             self._pub_front_bottom.publish(msg)
-        if 'bumper_back_level' in data:
+        if 'bumper_back_active' in data:
             msg = Bool()
-            msg.data = bool(data['bumper_back_level'])
+            msg.data = bool(data['bumper_back_active'])
             self._pub_back.publish(msg)

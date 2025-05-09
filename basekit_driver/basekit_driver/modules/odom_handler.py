@@ -1,3 +1,8 @@
+""" Copyright (c) 2024 Leibniz-Institut für Agrartechnik und Bioökonomie e.V. (ATB)
+    Modified by Zauberzeug GmbH
+"""
+
+
 from typing import Dict
 
 import numpy as np
