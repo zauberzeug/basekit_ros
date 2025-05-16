@@ -7,8 +7,9 @@ jobs:
     strategy:
       matrix:
         tools:
-          # - command: "mypy ./basekit_driver/basekit_driver --non-interactive --install-types"
-          - command: "pylint ./basekit_driver/basekit_driver"
+          # TODO: make sure mypy and pylint get all imports
+          - command: "mypy ./basekit_driver/basekit_driver --non-interactive --install-types --ignore-missing-imports"
+          - command: "pylint --disable=import-error ./basekit_driver/basekit_driver"
           - command: "ruff check ./basekit_driver/basekit_driver"
     runs-on: ubuntu-latest
     timeout-minutes: 5
