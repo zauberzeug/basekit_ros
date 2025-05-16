@@ -51,6 +51,11 @@ class SerialCommunication(Communication):
         self._logger.info('Init serial communication')
         self.open_port()
         self.mutex = Lock()
+
+        # Get expander name from parameter
+        node.declare_parameter('expander_name', 'expander')
+        self._expander_name = node.get_parameter('expander_name').value
+
         self.init_core_data(node)
 
     def init_core_data(self, node: Node):
@@ -189,7 +194,7 @@ class SerialCommunication(Communication):
                     return
                 if words[0] == 'core':
                     self.handle_core_message(words)
-                elif words[0] == 'expander:':
+                elif words[0] == f'{self._expander_name}:':
                     self.handle_expander_message(words)
                 elif words[0] == 'error':
                     self._logger.error(f'{line}')
