@@ -36,11 +36,14 @@ def generate_launch_description():
         Node(
             package='basekit_driver',
             executable='basekit_driver_node',
-            parameters=[config_file, {
-                'startup_file': startup_file
-            }],
+            name='controller',
+            parameters=[
+                config_file,
+                {
+                    'startup_file': startup_file,
+                }
+            ],
             respawn=True,
             respawn_delay=5,
-            name='controller'
         )
     ])
