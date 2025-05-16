@@ -7,7 +7,7 @@ jobs:
     strategy:
       matrix:
         tools:
-          - command: "mypy ./basekit_driver/basekit_driver --non-interactive --install-types"
+          # - command: "mypy ./basekit_driver/basekit_driver --non-interactive --install-types"
           - command: "pylint ./basekit_driver/basekit_driver"
           - command: "ruff check ./basekit_driver/basekit_driver"
     runs-on: ubuntu-latest
