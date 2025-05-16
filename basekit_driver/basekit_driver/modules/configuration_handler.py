@@ -23,7 +23,7 @@ class ConfigurationHandler:
         )
         self._startup_file = node.get_parameter('startup_file').value
 
-    def handle_configure(self, msg: Empty):
+    def handle_configure(self, _msg: Empty):
         """Push startup.liz to microcontroller if available."""
         if not self._startup_file:
             self._logger.warn('No startup file configured. Skipping configuration.')
@@ -43,4 +43,4 @@ class ConfigurationHandler:
                 self._comm.send('core.restart()')
                 self._logger.info('Configuration applied successfully')
         except Exception as e:
-            self._logger.error(f'Failed to apply configuration: {str(e)}')
+            self._logger.error(f'Failed to apply configuration: {e!s}')
