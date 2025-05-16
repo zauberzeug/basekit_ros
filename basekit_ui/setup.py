@@ -3,7 +3,7 @@ from glob import glob
 
 from setuptools import setup
 
-package_name = 'example_ui'
+package_name = 'basekit_ui'
 
 setup(
     name=package_name,
@@ -17,14 +17,14 @@ setup(
     ],
     install_requires=['setuptools'],
     zip_safe=True,
-    maintainer='Jens Ogorek',
-    maintainer_email='jens@zauberzeug.com',
+    maintainer='Zauberzeug GmbH',
+    maintainer_email='ros@zauberzeug.com',
     description='Example UI using NiceGUI',
     license='MIT',
     tests_require=['pytest'],
     entry_points={
         'console_scripts': [
-            'ui_node = example_ui.ui_node:main',
+            'ui_node = basekit_ui.ui_node:main',
         ],
     },
 )

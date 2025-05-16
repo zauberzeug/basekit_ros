@@ -14,7 +14,7 @@ setup(
     ],
     install_requires=['setuptools', 'geometry_msgs', 'sensor_msgs'],
     zip_safe=True,
-    maintainer='ros',
+    maintainer='Zauberzeug GmbH',
     maintainer_email='ros@zauberzeug.com',
     description='This is a driver for running the a basekit robot.',
     license='MIT License',

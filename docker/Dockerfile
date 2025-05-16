@@ -47,12 +47,12 @@ RUN cat /tmp/bashrc >> /root/.bashrc && rm -f /tmp/bashrc
 # Copy ROS packages
 COPY ./basekit_driver /workspace/src/basekit_driver
 COPY ./basekit_launch /workspace/src/basekit_launch
-COPY ./exampleui /workspace/src/example_ui
+COPY ./basekit_ui /workspace/src/basekit_ui
 
 # Build ROS packages
 WORKDIR /workspace
 RUN . /opt/ros/humble/setup.sh && \
-    colcon build --packages-select basekit_driver basekit_launch example_ui --symlink-install && \
+    colcon build --packages-select basekit_driver basekit_launch basekit_ui --symlink-install && \
     . install/setup.sh
 
 WORKDIR /workspace

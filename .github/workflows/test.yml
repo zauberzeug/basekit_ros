@@ -7,12 +7,9 @@ jobs:
     strategy:
       matrix:
         tools:
-          - command: "mypy ./basekit_driver --non-interactive --install-types"
-          - command: "pylint ./basekit_driver"
-          - command: "ruff check ./basekit_driver"
-          - command: "mypy ./exampleui --non-interactive --install-types"
-          - command: "pylint ./exampleui"
-          - command: "ruff check ./exampleui"
+          - command: "mypy ./basekit_driver/basekit_driver --non-interactive --install-types"
+          - command: "pylint ./basekit_driver/basekit_driver"
+          - command: "ruff check ./basekit_driver/basekit_driver"
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:

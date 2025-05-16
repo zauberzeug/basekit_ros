@@ -4,7 +4,7 @@
   <name>basekit_driver</name>
   <version>0.0.1</version>
   <description>Driver for running the a basekit robot</description>
-  <maintainer email="ros@zauberzeug.com">ros</maintainer>
+  <maintainer email="ros@zauberzeug.com">Zauberzeug GmbH</maintainer>
   <license>MIT License</license>
 
   <test_depend>ament_copyright</test_depend>
