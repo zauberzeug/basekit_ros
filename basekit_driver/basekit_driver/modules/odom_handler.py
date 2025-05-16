@@ -3,8 +3,6 @@
 """
 
 
-from typing import Dict
-
 import numpy as np
 from geometry_msgs.msg import PoseStamped
 from nav_msgs.msg import Odometry
@@ -54,9 +52,9 @@ class OdomHandler:
         if self._publish_tf:
             self._tf_broadcaster.sendTransform(self._data.get_transform_stamped())
 
-    def update(self, data: Dict) -> None:
+    def update(self, data: dict) -> None:
         """Read the data from a list of words."""
-        # self._logger.info(f'{data}')
+        self._logger.debug('%s', data)
 
         self._data.update_data(
             self._clock.now(),

@@ -2,8 +2,6 @@
     Modified by Zauberzeug GmbH
 """
 
-from typing import Dict
-
 from geometry_msgs.msg import PoseStamped
 from rclpy.node import Node
 from sensor_msgs.msg import BatteryState
@@ -30,7 +28,7 @@ class BMSHandler:
         comm.register_bms_observer(self)
         self._send_request_timer = node.create_timer(1, self.send_request)
 
-    def update(self, data: Dict) -> None:
+    def update(self, data: dict) -> None:
         """Read the data from a list of words."""
         try:
             data_bms = DataBMS([int(w, 16) for w in data])
