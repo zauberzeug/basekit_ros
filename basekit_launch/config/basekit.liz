@@ -42,6 +42,11 @@ imu = Imu()
 rdyp_status = Input(39)
 vdp_status = p0.Input(39)
 
+# control functions
+# let stop do wheels.speed(0, 0);end
+let stop do wheels.disable(); end
+let go do wheels.enable(); end
+
 let stop do wheels.speed(0, 0);end
 when estop_1.level == 0 then stop(); end
 when estop_2.level == 0 then stop(); end
@@ -53,4 +58,4 @@ when core.last_message_age > 20000 then stop(); end
 
 core.output("core.millis wheels.linear_speed:3 wheels.angular_speed:3 l0.motor_error_flag r0.motor_error_flag l1.motor_error_flag r1.motor_error_flag estop_1.active estop_2.active battery_control_status.level bumper_front_top.active bumper_front_bottom.active bumper_back.active imu.cal_gyr imu.quat_w:4 imu.quat_x:4 imu.quat_y:4 imu.quat_z:4 rdyp_status.level vdp_status.level core.heap")
 rdyp.on()
-en3.on()
+en3.on() 

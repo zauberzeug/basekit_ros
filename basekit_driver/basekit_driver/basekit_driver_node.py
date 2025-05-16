@@ -23,8 +23,10 @@ class BasekitDriver(Node):
     def __init__(self):
         super().__init__('basekit_driver_node')
 
-        self._serial_communication = SerialCommunication(self)
+        # Declare parameters
+        self.declare_parameter('startup_file', '')
 
+        self._serial_communication = SerialCommunication(self)
         self._odom_handler = OdomHandler(self, self._serial_communication)
         self._bms_handler = BMSHandler(self, self._serial_communication)
         self._bumper_handler = BumperHandler(self, self._serial_communication)
