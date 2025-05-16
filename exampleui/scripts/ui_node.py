@@ -10,7 +10,7 @@ from rclpy.executors import ExternalShutdownException
 from rclpy.node import Node
 from rclpy.qos import DurabilityPolicy, QoSProfile, ReliabilityPolicy
 from sensor_msgs.msg import BatteryState
-from std_msgs.msg import Bool
+from std_msgs.msg import Bool, Empty
 
 
 class NiceGuiNode(Node):
@@ -18,6 +18,7 @@ class NiceGuiNode(Node):
     def __init__(self) -> None:
         super().__init__('nicegui')
         self.cmd_vel_publisher = self.create_publisher(Twist, 'cmd_vel', 1)
+        self.configure_publisher = self.create_publisher(Empty, 'configure', 1)
 
         # Create reliable QoS profile for emergency stop
         estop_qos = QoSProfile(
@@ -61,6 +62,7 @@ class NiceGuiNode(Node):
                     self.angular = ui.slider(min=-1, max=1, step=0.05, value=0).props(slider_props)
                     ui.label('Battery').classes('text-xs mb-[-1.4em]')
                     self.battery = ui.label('---')
+                    ui.button('Send Lizard Config', color='green', on_click=self.send_config).classes('mt-4')
                 with ui.card().classes('flex-1 text-center items-center'):
                     ui.label('Safety').classes('text-2xl')
                     ui.label('Bumpers').classes('text-xs mb-[-1.4em]')
@@ -68,8 +70,8 @@ class NiceGuiNode(Node):
                     self.bumper_front_bottom = ui.label('Front Bottom: ---').classes('text-sm')
                     self.bumper_back = ui.label('Back: ---').classes('text-sm')
                     ui.label('E-Stops').classes('text-xs mb-[-1.4em] mt-4')
-                    self.estop1 = ui.label('E-Stop 1: ---').classes('text-sm')
-                    self.estop2 = ui.label('E-Stop 2: ---').classes('text-sm')
+                    self.estop1 = ui.label('E-Stop 1 (vorne): ---').classes('text-sm')
+                    self.estop2 = ui.label('E-Stop 2 (hinten): ---').classes('text-sm')
             with ui.card().classes('w-[48rem] items-center mt-3'):
                 ui.label('GPS Map').classes('text-2xl')
                 self.map = ui.leaflet(center=(48.137154, 11.576124), zoom=16).classes('w-full h-96')
@@ -120,10 +122,15 @@ class NiceGuiNode(Node):
         self.bumper_back.text = f'Back: {"ACTIVE" if msg.data else "inactive"}'
 
     def update_estop1(self, msg: Bool) -> None:
-        self.estop1.text = f'E-Stop 1: {"ACTIVE" if msg.data else "inactive"}'
+        self.estop1.text = f'E-Stop 1 (vorne): {"ACTIVE" if msg.data else "inactive"}'
 
     def update_estop2(self, msg: Bool) -> None:
-        self.estop2.text = f'E-Stop 2: {"ACTIVE" if msg.data else "inactive"}'
+        self.estop2.text = f'E-Stop 2 (hinten): {"ACTIVE" if msg.data else "inactive"}'
+
+    def send_config(self) -> None:
+        """Send trigger to configuration handler to apply lizard config."""
+        msg = Empty()
+        self.configure_publisher.publish(msg)
 
     def update_gps_ui(self) -> None:
         """Update the UI with the latest GPS data every 2 seconds."""
@@ -148,4 +155,4 @@ def ros_main() -> None:
 
 app.on_startup(lambda: threading.Thread(target=ros_main).start())
 ui_run.APP_IMPORT_STRING = f'{__name__}:app'  # ROS2 uses a non-standard module name, so we need to specify it here
-ui.run(uvicorn_reload_dirs=str(Path(__file__).parent.resolve()), favicon='🤖', port=9001)
+ui.run(uvicorn_reload_dirs=str(Path(__file__).parent.resolve()), favicon='🤖', port=80)
