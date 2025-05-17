@@ -64,7 +64,7 @@ The example UI provides a robot control interface built with NiceGUI, featuring 
 - Monitoring of safety systems (bumpers, emergency stops)
 - Software emergency stop control
 
-The interface is accessible through a web browser at `http://<ROBOT-IP>:9001` when the robot is running.
+The interface is accessible through a web browser at `http://<ROBOT-IP>:80` when the robot is running.
 
 <div align="center">
   <img src="assets/ExampleUI.png" alt="Example UI Screenshot" width="500"/>
@@ -120,7 +120,7 @@ To access the user interface (UI), follow these steps:
    Navigate to:
 
    ```
-   http://<ROBOT-IP>:9001
+   http://<ROBOT-IP>:80
    ```
 
    (Replace `<ROBOT-IP>` with the actual IP address once you have it.)
