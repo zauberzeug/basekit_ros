@@ -31,7 +31,7 @@ class Communication:
         for observer in self._bms_observers:
             observer.update(words)
 
-    def send(self):
+    def send(self, line: str) -> None:
         """Send data"""
 
     def read(self):

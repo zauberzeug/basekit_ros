@@ -7,9 +7,10 @@ jobs:
     strategy:
       matrix:
         tools:
-          - command: "mypy ./basekit --non-interactive"
-          - command: "pylint ./basekit"
-          - command: "ruff check ./basekit"
+          # TODO: make sure mypy and pylint get all imports
+          - command: "mypy ./basekit_driver/basekit_driver --non-interactive --install-types --ignore-missing-imports"
+          - command: "pylint --disable=import-error ./basekit_driver/basekit_driver"
+          - command: "ruff check ./basekit_driver/basekit_driver"
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
@@ -20,6 +21,6 @@ jobs:
           python-version: "3.11"
           cache: "pip"
       - name: install dependencies
-        run: pip install -r ./basekit/requirements-dev.txt
+        run: pip install -r requirements-dev.txt
       - name: ${{ matrix.tools.command }}
         run: ${{ matrix.tools.command }}

@@ -55,7 +55,7 @@ The GNSS system uses the [Septentrio GNSS driver](https://github.com/septentrio-
 - `/gpsfix`: Detailed GPS fix information including satellites and quality
 - `/aimplusstatus`: AIM+ status information
 
-### Example UI
+### Basekit UI
 
 The example UI provides a robot control interface built with NiceGUI, featuring a joystick control similar to turtlesim. It gives you access to and visualization of all topics made available by the BaseKit driver, including:
 
@@ -64,7 +64,7 @@ The example UI provides a robot control interface built with NiceGUI, featuring 
 - Monitoring of safety systems (bumpers, emergency stops)
 - Software emergency stop control
 
-The interface is accessible through a web browser at `http://<ROBOT-IP>:9001` when the robot is running.
+The interface is accessible through a web browser at `http://<ROBOT-IP>:80` when the robot is running.
 
 <div align="center">
   <img src="assets/ExampleUI.png" alt="Example UI Screenshot" width="500"/>
@@ -113,14 +113,14 @@ The Docker setup includes:
 
 To access the user interface (UI), follow these steps:
 
-1. **Connect to the Robot's Wi-Fi:**  
+1. **Connect to the Robot's Wi-Fi:**
    Join the robot's WLAN network.
 
-2. **Open the UI in your browser:**  
+2. **Open the UI in your browser:**
    Navigate to:
 
    ```
-   http://<ROBOT-IP>:9001
+   http://<ROBOT-IP>:80
    ```
 
    (Replace `<ROBOT-IP>` with the actual IP address once you have it.)

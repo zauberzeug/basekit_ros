@@ -1,10 +1,9 @@
 import glob
-import os
 
 import launch
 from ament_index_python.packages import get_package_share_directory
 from launch.actions import DeclareLaunchArgument
-from launch.substitutions import Command, LaunchConfiguration, TextSubstitution
+from launch.substitutions import LaunchConfiguration, TextSubstitution
 from launch_ros.actions import ComposableNodeContainer, Node
 from launch_ros.descriptions import ComposableNode
 
@@ -33,10 +32,10 @@ def generate_launch_description():
     # TF publishers for different frames
     tf_publishers = [
         Node(
-            package="tf2_ros",
-            executable="static_transform_publisher",
-            arguments=f"0 0 0 0 0 0 {source} {target}".split(' '),
-            name=f"tf_{source}_{target}"
+            package='tf2_ros',
+            executable='static_transform_publisher',
+            arguments=f'0 0 0 0 0 0 {source} {target}'.split(' '),
+            name=f'tf_{source}_{target}'
         )
         for source, target in [
             ('base_link', 'imu'),
@@ -48,7 +47,7 @@ def generate_launch_description():
 
     # Configuration file setup
     default_file_name = 'gnss.yaml'
-    name_arg_file_name = "file_name"
+    name_arg_file_name = 'file_name'
     arg_file_name = DeclareLaunchArgument(
         name_arg_file_name,
         default_value=TextSubstitution(text=str(default_file_name))

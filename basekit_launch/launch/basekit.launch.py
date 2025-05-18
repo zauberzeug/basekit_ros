@@ -11,7 +11,7 @@ from launch.launch_description_sources import PythonLaunchDescriptionSource
 def generate_launch_description():
     """Generate launch description for the complete basekit system."""
     pkg_dir = get_package_share_directory('basekit_launch')
-    ui_pkg_dir = get_package_share_directory('example_ui')
+    ui_pkg_dir = get_package_share_directory('basekit_ui')
 
     # Include the GNSS launch file
     gnss_launch = IncludeLaunchDescription(

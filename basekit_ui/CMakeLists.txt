@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.8)
-project(example_ui)
+project(basekit_ui)
 
 if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
   add_compile_options(-Wall -Wextra -Wpedantic)
@@ -28,4 +28,4 @@ if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/launch")
   )
 endif()
 
-ament_package() 
+ament_package()
