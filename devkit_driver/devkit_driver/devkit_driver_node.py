@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 
+import logging
 import os
 import threading
 from pathlib import Path
@@ -7,7 +8,7 @@ from pathlib import Path
 import rclpy
 import rclpy.parameter
 import rosys
-from ament_index_python.packages import get_package_share_directory
+from ament_index_python.packages import PackageNotFoundError, get_package_share_directory
 from feldfreund_devkit import FeldfreundHardware, FeldfreundSimulation, System, api
 from feldfreund_devkit.config import Secrets, config_from_file
 from nicegui import app, ui, ui_run
@@ -94,6 +95,9 @@ def on_shutdown() -> None:
         rclpy.shutdown()  # makes rclpy.spin() in the ROS thread return
     if _state.ros_thread is not None:
         _state.ros_thread.join(timeout=5.0)
+        if _state.ros_thread.is_alive():
+            logging.getLogger('devkit_driver').warning(
+                'ROS spin thread did not terminate within 5s of shutdown; abandoning it')
 
 
 def ros_main(system: System) -> None:
@@ -113,7 +117,14 @@ def _config_file_path() -> str:
     override = os.environ.get('DEVKIT_CONFIG')
     if override:
         return override
-    return os.path.join(get_package_share_directory('devkit_launch'), 'config', 'feldfreund.py')
+    try:
+        share_dir = get_package_share_directory('devkit_launch')
+    except PackageNotFoundError as error:
+        raise RuntimeError(
+            "could not locate the 'devkit_launch' package to resolve the config file; "
+            'build/source the workspace or set the DEVKIT_CONFIG environment variable to the config path'
+        ) from error
+    return os.path.join(share_dir, 'config', 'feldfreund.py')
 
 
 app.on_startup(on_startup)
