@@ -29,6 +29,8 @@ class BumperHandler(Handler):
 
     def _handle_bumper_triggered(self, bumper_name: str) -> None:
         """Handle bumper triggered event."""
+        if not self.active:
+            return
         if bumper_name == 'front_top':
             self._pub_front_top.publish(Bool(data=True))
         elif bumper_name == 'front_bottom':
@@ -38,6 +40,8 @@ class BumperHandler(Handler):
 
     def _handle_bumper_released(self, bumper_name: str) -> None:
         """Handle bumper released event."""
+        if not self.active:
+            return
         if bumper_name == 'front_top':
             self._pub_front_top.publish(Bool(data=False))
         elif bumper_name == 'front_bottom':

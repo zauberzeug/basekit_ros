@@ -35,12 +35,16 @@ class EStopHandler(Handler):
                 self._handle_estop_released(name)
 
     def _handle_estop_triggered(self, name: str) -> None:
+        if not self.active:
+            return
         if name == self.FRONT_ID:
             self.estop_front_publisher.publish(Bool(data=True))
         elif name == self.BACK_ID:
             self.estop_back_publisher.publish(Bool(data=True))
 
     def _handle_estop_released(self, name: str) -> None:
+        if not self.active:
+            return
         if name == self.FRONT_ID:
             self.estop_front_publisher.publish(Bool(data=False))
         elif name == self.BACK_ID:

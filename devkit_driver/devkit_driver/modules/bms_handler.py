@@ -18,6 +18,8 @@ class BMSHandler(Handler):
 
     def _handle_bms_update(self, state: BmsState) -> None:
         """Handle BMS update event."""
+        if not self.active:
+            return
         message = self._state_to_ros_message(state)
         if message is None:
             self.log.warning('BMS state has None values, skipping publish')

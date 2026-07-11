@@ -42,6 +42,8 @@ class OdomHandler(Handler):
 
     def publish_odom(self, *_args) -> None:
         """Publish odometry data to ros."""
+        if not self.active:
+            return
         pose = self._odom.pose
         timestamp_message = self.node.get_clock().now().to_msg()
         quat = Quaternion(axis=[0, 0, 1], angle=pose.yaw)

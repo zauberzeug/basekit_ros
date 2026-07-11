@@ -49,6 +49,9 @@ class DevkitDriver(Node):
 
     def _publish_clock(self) -> None:
         """Publish RoSys simulation time to ROS2 /clock topic."""
+        # RoSys keeps firing this repeater during shutdown, after the publisher is destroyed.
+        if not rclpy.ok():
+            return
         current_time = rosys.time()
 
         msg = Clock()
