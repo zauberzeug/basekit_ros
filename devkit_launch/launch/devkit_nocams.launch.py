@@ -16,5 +16,5 @@ def generate_launch_description() -> LaunchDescription:
         foxglove_bridge(),
         include_launch('gnss.launch.py'),
         include_launch('devkit_driver.launch.py'),
-        include_launch('ui.launch.py', package='devkit_ui'),
+        include_launch('ui.launch.py'),
     ])
