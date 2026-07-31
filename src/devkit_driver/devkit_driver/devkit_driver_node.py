@@ -19,6 +19,7 @@ from devkit_driver.modules import (
     EStopHandler,
     ImuHandler,
     OdomHandler,
+    ReconDEMLogger,
     RobotBrainHandler,
     TwistHandler,
 )
@@ -42,6 +43,10 @@ class DevkitDriver(Node):
 
         # Odometry is standard across both modes
         self._odom_handler = OdomHandler(self, self.system.odometer)
+
+        # Opt-in RTK recon logging for DEM building (see issue #110);
+        # subscribes to /gnss/fix + /odom directly, no hardware attr needed.
+        self._recon_dem_logger = ReconDEMLogger(self)
 
         if hasattr(self.system.feldfreund, 'bms'):
             self._bms_handler = BMSHandler(self, self.system.feldfreund.bms)
