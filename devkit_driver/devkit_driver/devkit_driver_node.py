@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 
+import logging
 import os
 import threading
 from pathlib import Path
@@ -7,6 +8,7 @@ from pathlib import Path
 import rclpy
 import rclpy.parameter
 import rosys
+from ament_index_python.packages import PackageNotFoundError, get_package_share_directory
 from feldfreund_devkit import FeldfreundHardware, FeldfreundSimulation, System, api
 from feldfreund_devkit.config import Secrets, config_from_file
 from nicegui import app, ui, ui_run
@@ -48,6 +50,9 @@ class DevkitDriver(Node):
 
     def _publish_clock(self) -> None:
         """Publish RoSys simulation time to ROS2 /clock topic."""
+        # RoSys keeps firing this repeater during shutdown, after the publisher is destroyed.
+        if not rclpy.ok():
+            return
         current_time = rosys.time()
 
         msg = Clock()
@@ -55,6 +60,14 @@ class DevkitDriver(Node):
         msg.clock.nanosec = int((current_time - int(current_time)) * 1e9)
 
         self._clock_publisher.publish(msg)
+
+
+class _State:
+    """Module-level container for the spinning ROS thread (avoids a global statement)."""
+    ros_thread: threading.Thread | None = None
+
+
+_state = _State()
 
 
 def main() -> None:
@@ -69,10 +82,22 @@ def on_startup() -> None:
         rosys.enter_simulation()
 
     secrets = Secrets()
-    config = config_from_file('/workspace/src/devkit_launch/config/feldfreund.py', secrets=secrets)
+    config = config_from_file(_config_file_path(), secrets=secrets)
     system = System(config, secrets=secrets)
     api.Online()
-    threading.Thread(target=ros_main, args=(system,)).start()
+    _state.ros_thread = threading.Thread(target=ros_main, args=(system,), name='ros_spin')
+    _state.ros_thread.start()
+
+
+def on_shutdown() -> None:
+    """Stop the ROS thread cleanly when NiceGUI shuts down."""
+    if rclpy.ok():
+        rclpy.shutdown()  # makes rclpy.spin() in the ROS thread return
+    if _state.ros_thread is not None:
+        _state.ros_thread.join(timeout=5.0)
+        if _state.ros_thread.is_alive():
+            logging.getLogger('devkit_driver').warning(
+                'ROS spin thread did not terminate within 5s of shutdown; abandoning it')
 
 
 def ros_main(system: System) -> None:
@@ -82,8 +107,27 @@ def ros_main(system: System) -> None:
         rclpy.spin(devkit_driver)
     except ExternalShutdownException:
         pass
+    finally:
+        devkit_driver.destroy_node()
+        rclpy.try_shutdown()
+
+
+def _config_file_path() -> str:
+    """Return the devkit config file path; override with the DEVKIT_CONFIG environment variable."""
+    override = os.environ.get('DEVKIT_CONFIG')
+    if override:
+        return override
+    try:
+        share_dir = get_package_share_directory('devkit_launch')
+    except PackageNotFoundError as error:
+        raise RuntimeError(
+            "could not locate the 'devkit_launch' package to resolve the config file; "
+            'build/source the workspace or set the DEVKIT_CONFIG environment variable to the config path'
+        ) from error
+    return os.path.join(share_dir, 'config', 'feldfreund.py')
 
 
 app.on_startup(on_startup)
+app.on_shutdown(on_shutdown)
 ui_run.APP_IMPORT_STRING = f'{__name__}:app'  # ROS2 uses a non-standard module name, so we need to specify it here
 ui.run(uvicorn_reload_dirs=str(Path(__file__).parent.resolve()), favicon='🤖')

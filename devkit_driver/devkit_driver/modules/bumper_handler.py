@@ -4,13 +4,14 @@ from rosys.hardware import Bumper, EStop
 from std_msgs.msg import Bool
 
 from ..qos import SAFETY_QOS
+from .base import Handler
 
 
-class BumperHandler:
+class BumperHandler(Handler):
     """Handle the bumper states from core data."""
 
     def __init__(self, node: Node, bumper: Bumper, estop: EStop):
-        self.log = node.get_logger()
+        super().__init__(node)
         self._bumper = bumper
         self._estop = estop
 
@@ -28,6 +29,8 @@ class BumperHandler:
 
     def _handle_bumper_triggered(self, bumper_name: str) -> None:
         """Handle bumper triggered event."""
+        if not self.active:
+            return
         if bumper_name == 'front_top':
             self._pub_front_top.publish(Bool(data=True))
         elif bumper_name == 'front_bottom':
@@ -37,6 +40,8 @@ class BumperHandler:
 
     def _handle_bumper_released(self, bumper_name: str) -> None:
         """Handle bumper released event."""
+        if not self.active:
+            return
         if bumper_name == 'front_top':
             self._pub_front_top.publish(Bool(data=False))
         elif bumper_name == 'front_bottom':
