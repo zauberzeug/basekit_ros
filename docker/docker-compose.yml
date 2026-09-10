@@ -2,6 +2,7 @@ version: "3.8"
 
 services:
   devkit:
+    profiles: ["devkit"] # keeps `docker compose up` from starting this alongside devkit-simulation
     build:
       context: ..
       dockerfile: docker/Dockerfile
@@ -27,6 +28,7 @@ services:
     restart: unless-stopped
 
   devkit-simulation:
+    profiles: ["simulation"] # keeps `docker compose up` from starting this alongside devkit
     build:
       context: ..
       dockerfile: docker/Dockerfile
