@@ -32,6 +32,13 @@ module = [
 ]
 ignore_missing_imports = true
 
+[[tool.mypy.overrides]]
+# rosys>=0.34 (pulled in transitively via the feldfreund_devkit pin) depends on `mcap`, whose
+# package layout makes mypy report "Source file found twice under different module names:
+# mcap and mcap.__init__". Skip following into it instead of type-checking its internals.
+module = ["mcap", "mcap.*"]
+follow_imports = "skip"
+
 [tool.pylint]
 disable = [
     "C0103", # Invalid name (e.g., variable/function/class naming conventions)
