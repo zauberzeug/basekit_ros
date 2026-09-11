@@ -17,6 +17,7 @@ def test_qos_profile_is_configured() -> None:
 
 def test_all_handler_modules_import() -> None:
     handlers = (
+        modules.AppControlsHandler,
         modules.BMSHandler,
         modules.BumperHandler,
         modules.EStopHandler,
@@ -26,3 +27,4 @@ def test_all_handler_modules_import() -> None:
         modules.WeedingScrewHandler,
     )
     assert all(handler is not None for handler in handlers)
+    assert modules.create_app_controls is not None
