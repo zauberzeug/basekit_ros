@@ -6,6 +6,11 @@ authors = [{ name="Zauberzeug GmbH", email="info@zauberzeug.com" }]
 readme = "README.md"
 requires-python = ">=3.11, <3.14"
 
+[dependency-groups]
+dev = [
+    "livesync",
+]
+
 [tool.mypy]
 python_version = "3.11"
 check_untyped_defs = true
@@ -26,6 +31,11 @@ module = [
     "pyquaternion",
 ]
 ignore_missing_imports = true
+
+[[tool.mypy.overrides]]
+# mcap's package layout confuses mypy's module resolution; skip following into it.
+module = ["mcap", "mcap.*"]
+follow_imports = "skip"
 
 [tool.pylint]
 disable = [

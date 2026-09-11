@@ -19,6 +19,7 @@ RUN apt-get update && apt-get install -y \
         python3-serial \
         python3-requests \
         python3-yaml \
+        sudo \
         git \
         nano \
         wget \

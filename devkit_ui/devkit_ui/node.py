@@ -1,4 +1,3 @@
-# pylint: disable=duplicate-code
 from __future__ import annotations
 
 from geometry_msgs.msg import Twist
@@ -10,11 +9,13 @@ from std_msgs.msg import Bool, Empty
 
 from .dashboard import Dashboard
 
+# pylint: disable=duplicate-code  # mirrors devkit_driver.qos; the ui package must not depend on the driver package
 SAFETY_QOS = QoSProfile(depth=1,
                         reliability=ReliabilityPolicy.RELIABLE,
                         durability=DurabilityPolicy.TRANSIENT_LOCAL,
                         liveliness=LivelinessPolicy.AUTOMATIC,
                         liveliness_lease_duration=Duration(seconds=1))
+# pylint: enable=duplicate-code
 
 
 class NiceGuiNode(Node):
