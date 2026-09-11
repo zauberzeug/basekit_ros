@@ -17,7 +17,7 @@ class EStopHandler(Handler):
         super().__init__(node)
         self._estop = estop
 
-        self.subscription = node.create_subscription(Bool, 'estop/soft', self.soft_estop_callback, 10)
+        self.subscription = node.create_subscription(Bool, 'estop/soft', self.soft_estop_callback, SAFETY_QOS)
         self.estop_front_publisher = node.create_publisher(Bool, 'estop/front', SAFETY_QOS)
         self.estop_back_publisher = node.create_publisher(Bool, 'estop/back', SAFETY_QOS)
 
