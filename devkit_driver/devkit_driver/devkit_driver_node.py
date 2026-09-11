@@ -15,8 +15,10 @@ from nicegui import app, ui, ui_run
 from rclpy.executors import ExternalShutdownException
 from rclpy.node import Node
 from rosgraph_msgs.msg import Clock
+from rosys.automation.app_controls_ import AppControls
 
 from devkit_driver.modules import (
+    AppControlsHandler,
     BMSHandler,
     BumperHandler,
     EStopHandler,
@@ -24,6 +26,7 @@ from devkit_driver.modules import (
     RobotBrainHandler,
     TwistHandler,
     WeedingScrewHandler,
+    create_app_controls,
 )
 from devkit_driver.weeding_screw import WeedingScrew, WeedingScrewConfiguration
 
@@ -31,7 +34,7 @@ from devkit_driver.weeding_screw import WeedingScrew, WeedingScrewConfiguration
 class DevkitDriver(Node):
     """Devkit node handler."""
 
-    def __init__(self, system: System):
+    def __init__(self, system: System, app_controls: AppControls | None):
         super().__init__('devkit_driver_node')
         self.system = system
 
@@ -58,6 +61,8 @@ class DevkitDriver(Node):
         self._estop_handler = EStopHandler(self, self.system.feldfreund.estop)
         if isinstance(self.system.feldfreund.implement, WeedingScrew):
             self._weeding_screw_handler = WeedingScrewHandler(self, self.system.feldfreund.implement)
+            if app_controls is not None:
+                self._app_controls_handler = AppControlsHandler(self, app_controls)
 
     def _publish_clock(self) -> None:
         """Publish RoSys simulation time to ROS2 /clock topic."""
@@ -74,8 +79,10 @@ class DevkitDriver(Node):
 
 
 class _State:
-    """Module-level container for the spinning ROS thread (avoids a global statement)."""
+    """Module-level container for objects shared between `on_startup()` and the ROS thread
+    (avoids global statements)."""
     ros_thread: threading.Thread | None = None
+    app_controls: AppControls | None = None
 
 
 _state = _State()
@@ -97,8 +104,12 @@ def on_startup() -> None:
     system = System(config, secrets=secrets)
     if isinstance(config.implement, WeedingScrewConfiguration):
         system.feldfreund.add_implement(WeedingScrew(config.implement, system.feldfreund))
+    # Built here, synchronously, rather than later in DevkitDriver (ROS thread) - see
+    # create_app_controls' docstring for why that matters.
+    if isinstance(system.feldfreund, FeldfreundHardware) and isinstance(system.feldfreund.implement, WeedingScrew):
+        _state.app_controls = create_app_controls(system.feldfreund.robot_brain, system.feldfreund.bluetooth)
     api.Online()
-    _state.ros_thread = threading.Thread(target=ros_main, args=(system,), name='ros_spin')
+    _state.ros_thread = threading.Thread(target=ros_main, args=(system, _state.app_controls), name='ros_spin')
     _state.ros_thread.start()
 
 
@@ -113,9 +124,9 @@ def on_shutdown() -> None:
                 'ROS spin thread did not terminate within 5s of shutdown; abandoning it')
 
 
-def ros_main(system: System) -> None:
+def ros_main(system: System, app_controls: AppControls | None) -> None:
     rclpy.init()
-    devkit_driver = DevkitDriver(system)
+    devkit_driver = DevkitDriver(system, app_controls)
     try:
         rclpy.spin(devkit_driver)
     except ExternalShutdownException:

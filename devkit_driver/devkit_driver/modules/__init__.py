@@ -1,3 +1,4 @@
+from .app_controls_handler import AppControlsHandler, create_app_controls
 from .bms_handler import BMSHandler
 from .bumper_handler import BumperHandler
 from .estop_handler import EStopHandler
@@ -7,6 +8,7 @@ from .twist_handler import TwistHandler
 from .weeding_screw_handler import WeedingScrewHandler
 
 __all__ = [
+    'AppControlsHandler',
     'BMSHandler',
     'BumperHandler',
     'EStopHandler',
@@ -14,4 +16,5 @@ __all__ = [
     'RobotBrainHandler',
     'TwistHandler',
     'WeedingScrewHandler',
+    'create_app_controls',
 ]
