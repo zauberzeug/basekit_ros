@@ -25,6 +25,7 @@ def main() -> None:
     pass
 
 
+# pylint: disable=duplicate-code  # same NiceGUI thread boilerplate as devkit_driver_node; not worth a shared package
 def on_startup() -> None:
     _state.ros_thread = threading.Thread(target=ros_main, name='ros_spin')
     _state.ros_thread.start()
@@ -36,6 +37,7 @@ def on_shutdown() -> None:
         rclpy.shutdown()  # makes rclpy.spin() in the ROS thread return
     if _state.ros_thread is not None:
         _state.ros_thread.join(timeout=5.0)
+# pylint: enable=duplicate-code
 
 
 def ros_main() -> None:
